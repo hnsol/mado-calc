@@ -141,9 +141,8 @@ function clearInputs() {
     document.getElementById('results').style.display = 'none';
 }
 
-// フレーバー選択時にアクセント色を変更して、計算結果を消去
-document.getElementById('flavor').addEventListener('change', function(e) {
-    const flavorId = e.target.value;
+function onFlavorChange() {
+    const flavorId = document.getElementById('flavor').value;
     const colors = {
         cheese: '#df8e1d',  // Catppuccin Yellow
         onion: '#d65d0b'    // Catppuccin Brown
@@ -151,7 +150,10 @@ document.getElementById('flavor').addEventListener('change', function(e) {
     document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#df8e1d');
     // 計算結果を消去
     document.getElementById('results').style.display = 'none';
-});
+}
+
+// フレーバー選択時にアクセント色を変更して、計算結果を消去（addEventListener併用でSafari対応）
+document.getElementById('flavor').addEventListener('change', onFlavorChange);
 
 // 初期表示時にアクセント色を設定
 document.documentElement.style.setProperty('--accent-color', '#df8e1d');
