@@ -131,6 +131,10 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
     document.getElementById('results').style.display = 'block';
 }
 
+function setCans(value) {
+    document.getElementById('cans').value = value;
+}
+
 function clearInputs() {
     document.getElementById('cans').value = '20';
     document.getElementById('remainingDough').value = '0.0';
@@ -141,14 +145,14 @@ function clearInputs() {
 document.getElementById('flavor').addEventListener('change', function(e) {
     const flavorId = e.target.value;
     const colors = {
-        cheese: '#f0d04d',  // Bright Catppuccin Yellow
+        cheese: '#df8e1d',  // Catppuccin Yellow
         onion: '#d65d0b'    // Catppuccin Brown
     };
-    document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#f0d04d');
+    document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#df8e1d');
 });
 
 // 初期表示時にアクセント色を設定
-document.documentElement.style.setProperty('--accent-color', '#f0d04d');
+document.documentElement.style.setProperty('--accent-color', '#df8e1d');
 
 // Enterキーで計算できるようにする
 document.getElementById('remainingDough').addEventListener('keypress', function(e) {

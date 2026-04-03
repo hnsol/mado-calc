@@ -11,17 +11,27 @@
         <h1>🪟 mado-calc ⚖️</h1>
 
         <div class="input-section">
-            <div class="input-group">
-                <label for="flavor">フレーバー:</label>
-                <select id="flavor">
-                    <option value="cheese" selected>チーズ</option>
-                    <option value="onion">玉ねぎ</option>
-                </select>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="flavor">フレーバー:</label>
+                    <select id="flavor">
+                        <option value="cheese" selected>チーズ</option>
+                        <option value="onion">玉ねぎ</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="cans">缶数:</label>
+                    <input type="number" id="cans" placeholder="整数で入力" min="1" step="10" value="20">
+                </div>
             </div>
 
-            <div class="input-group">
-                <label for="cans">缶数:</label>
-                <input type="number" id="cans" placeholder="整数で入力" min="1" step="10" value="20">
+            <div class="preset-buttons">
+                <button onclick="setCans(10)" class="preset-btn">10</button>
+                <button onclick="setCans(20)" class="preset-btn">20</button>
+                <button onclick="setCans(30)" class="preset-btn">30</button>
+                <button onclick="setCans(40)" class="preset-btn">40</button>
+                <button onclick="setCans(50)" class="preset-btn">50</button>
             </div>
 
             <div class="input-group">
