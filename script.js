@@ -100,7 +100,7 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
     // 入力情報の表示
     document.getElementById('resultFlavor').textContent = flavorName;
     document.getElementById('resultCans').textContent = cans;
-    document.getElementById('resultTotalPieces').textContent = `${cansPieces} + 予備${reservePieces} = ${totalPieces}枚`;
+    document.getElementById('resultTotalPieces').textContent = `${cansPieces} + 予備${reservePieces} = ${totalPieces}`;
 
     // 余り生地の表示
     document.getElementById('resultRemainingGrams').textContent = remainingGrams.toFixed(1);
@@ -131,18 +131,24 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
     document.getElementById('results').style.display = 'block';
 }
 
+function clearInputs() {
+    document.getElementById('cans').value = '20';
+    document.getElementById('remainingDough').value = '0.0';
+    document.getElementById('results').style.display = 'none';
+}
+
 // フレーバー選択時にアクセント色を変更
 document.getElementById('flavor').addEventListener('change', function(e) {
     const flavorId = e.target.value;
     const colors = {
-        cheese: '#df8e1d',  // Catppuccin Yellow
+        cheese: '#f0d04d',  // Bright Catppuccin Yellow
         onion: '#d65d0b'    // Catppuccin Brown
     };
-    document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#df8e1d');
+    document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#f0d04d');
 });
 
 // 初期表示時にアクセント色を設定
-document.documentElement.style.setProperty('--accent-color', '#df8e1d');
+document.documentElement.style.setProperty('--accent-color', '#f0d04d');
 
 // Enterキーで計算できるようにする
 document.getElementById('remainingDough').addEventListener('keypress', function(e) {

@@ -5,12 +5,12 @@
 }
 
 :root {
-    --accent-color: #df8e1d;
+    --accent-color: #f0d04d;
     --catppuccin-base: #fffdf5;
     --catppuccin-surface0: #f5f5f0;
     --catppuccin-surface1: #e8e8e0;
     --catppuccin-text: #4c4f69;
-    --catppuccin-yellow: #df8e1d;
+    --catppuccin-yellow: #f0d04d;
     --catppuccin-brown: #d65d0b;
 }
 
@@ -62,36 +62,63 @@ h3 {
 /* 入力セクション */
 .input-section {
     background-color: white;
-    padding: 24px;
+    padding: 16px;
     border-radius: 8px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     border: 1px solid var(--catppuccin-surface1);
 }
 
-.input-group {
-    margin-bottom: 16px;
+@media (min-width: 640px) {
+    .input-section {
+        padding: 20px;
+    }
 }
 
-.input-group:last-child {
+.input-group {
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.input-group:last-of-type {
+    margin-bottom: 12px;
+}
+
+.input-group label {
     margin-bottom: 0;
 }
 
 label {
-    display: block;
-    margin-bottom: 8px;
     font-weight: 600;
     color: #333;
-    font-size: 14px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    label {
+        font-size: 12px;
+    }
 }
 
 select,
 input[type="number"] {
     width: 100%;
-    padding: 12px;
-    font-size: 16px;
+    padding: 8px;
+    font-size: 14px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 4px;
     font-family: inherit;
+}
+
+@media (min-width: 640px) {
+    select,
+    input[type="number"] {
+        padding: 10px;
+        font-size: 15px;
+    }
 }
 
 select:focus,
@@ -101,26 +128,53 @@ input[type="number"]:focus {
     box-shadow: 0 0 0 3px rgba(223, 142, 29, 0.15);
 }
 
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+@media (min-width: 640px) {
+    .button-group {
+        gap: 12px;
+    }
+}
+
 button {
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
+    padding: 10px;
+    font-size: 14px;
     font-weight: 600;
     background-color: var(--accent-color);
-    color: white;
+    color: #222;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-top: 16px;
-    transition: background-color 0.2s ease;
+    transition: opacity 0.2s ease;
+}
+
+@media (min-width: 640px) {
+    button {
+        padding: 12px;
+        font-size: 15px;
+    }
 }
 
 button:hover {
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
 button:active {
-    opacity: 0.85;
+    opacity: 0.75;
+}
+
+button.clear-button {
+    background-color: var(--catppuccin-surface1);
+    color: var(--catppuccin-text);
+}
+
+button.clear-button:hover {
+    background-color: #ddd;
 }
 
 /* 結果セクション */
