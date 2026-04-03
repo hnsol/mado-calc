@@ -14,7 +14,8 @@
       "Bash(git commit -m \"Fix Safari compatibility for flavor change handling:*)",
       "Bash(git commit -m \"Merge result display into single field:*)",
       "Bash(git commit -m \"Remove grams display from additional pieces:*)",
-      "Bash(git commit -m \"Add preset buttons for remaining dough:*)"
+      "Bash(git commit -m \"Add preset buttons for remaining dough:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

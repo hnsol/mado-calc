@@ -9,15 +9,20 @@
 <body>
     <div class="container">
         <div class="input-section">
-            <div class="input-row">
-                <select id="flavor" onchange="onFlavorChange()">
-                    <option value="cheese" selected>チーズ</option>
-                    <option value="onion">玉ねぎ</option>
-                </select>
+            <select id="flavor" onchange="onFlavorChange()">
+                <option value="cheese" selected>チーズ</option>
+                <option value="onion">玉ねぎ</option>
+            </select>
 
+            <div class="input-row">
                 <div class="input-group">
                     <label for="cans">缶数:</label>
                     <input type="number" id="cans" placeholder="整数で入力" min="1" step="10" value="20">
+                </div>
+
+                <div class="input-group">
+                    <label for="remainingDough">余り生地(g):</label>
+                    <input type="number" id="remainingDough" placeholder="小数点1位まで" step="10" value="0.0">
                 </div>
             </div>
 
@@ -27,11 +32,6 @@
                 <button type="button" onclick="setCans(30); return false;" class="preset-btn">30缶</button>
                 <button type="button" onclick="setCans(40); return false;" class="preset-btn">40缶</button>
                 <button type="button" onclick="setCans(50); return false;" class="preset-btn">50缶</button>
-            </div>
-
-            <div class="input-group">
-                <label for="remainingDough">余り生地(g):</label>
-                <input type="number" id="remainingDough" placeholder="小数点1位まで" step="10" value="0.0">
             </div>
 
             <div class="preset-buttons">
