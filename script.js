@@ -97,6 +97,14 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
     const cansPieces = cans * piecesPerCan;
     const totalPieces = cansPieces + reservePieces;
 
+    // 警告メッセージを表示するかどうかをチェック
+    const warningMessage = document.getElementById('warningMessage');
+    if (additionalPieces <= 0) {
+        warningMessage.style.display = 'block';
+    } else {
+        warningMessage.style.display = 'none';
+    }
+
     // 入力情報の表示
     document.getElementById('resultFlavor').textContent = flavorName;
     document.getElementById('resultCans').textContent = cans;
