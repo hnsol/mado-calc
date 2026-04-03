@@ -281,8 +281,12 @@ button.clear-button:hover {
 }
 
 .result-group.compact p {
-    margin-bottom: 0;
+    margin-bottom: 6px;
     font-size: 15px;
+}
+
+.result-group.compact p:last-child {
+    margin-bottom: 0;
 }
 
 .result-group p:last-child {
