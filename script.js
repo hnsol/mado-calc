@@ -141,7 +141,7 @@ function clearInputs() {
     document.getElementById('results').style.display = 'none';
 }
 
-// フレーバー選択時にアクセント色を変更
+// フレーバー選択時にアクセント色を変更して、計算結果を消去
 document.getElementById('flavor').addEventListener('change', function(e) {
     const flavorId = e.target.value;
     const colors = {
@@ -149,6 +149,8 @@ document.getElementById('flavor').addEventListener('change', function(e) {
         onion: '#d65d0b'    // Catppuccin Brown
     };
     document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#df8e1d');
+    // 計算結果を消去
+    document.getElementById('results').style.display = 'none';
 });
 
 // 初期表示時にアクセント色を設定
