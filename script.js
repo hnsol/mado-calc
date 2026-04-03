@@ -134,6 +134,10 @@ function setCans(value) {
     document.getElementById('cans').value = value;
 }
 
+function setRemainingDough(value) {
+    document.getElementById('remainingDough').value = value;
+}
+
 function clearInputs() {
     document.getElementById('cans').value = '20';
     document.getElementById('remainingDough').value = '0.0';
