@@ -108,7 +108,6 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
 
     // 追加生地の表示
     document.getElementById('resultAdditionalPieces').textContent = additionalPieces;
-    document.getElementById('resultAdditionalGrams').textContent = totalAdditionalGrams.toFixed(1);
 
     // 素材ごとのグラム数を表示
     const materialsDetailDiv = document.getElementById('materialsDetail');

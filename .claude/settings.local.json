@@ -12,7 +12,8 @@
       "Bash(git commit -m \"Refine UI: adjust color, layout, add preset buttons:*)",
       "Bash(git commit -m \"Add flavor change handling and improve spacing:*)",
       "Bash(git commit -m \"Fix Safari compatibility for flavor change handling:*)",
-      "Bash(git commit -m \"Merge result display into single field:*)"
+      "Bash(git commit -m \"Merge result display into single field:*)",
+      "Bash(git commit -m \"Remove grams display from additional pieces:*)"
     ]
   }
 }
