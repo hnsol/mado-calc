@@ -99,10 +99,12 @@ function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
 
     // 警告メッセージを表示するかどうかをチェック
     const warningMessage = document.getElementById('warningMessage');
-    if (additionalPieces <= 0) {
-        warningMessage.style.display = 'block';
-    } else {
-        warningMessage.style.display = 'none';
+    if (warningMessage) {
+        if (additionalPieces <= 0) {
+            warningMessage.style.display = 'block';
+        } else {
+            warningMessage.style.display = 'none';
+        }
     }
 
     // 入力情報の表示
