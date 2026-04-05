@@ -261,8 +261,32 @@ function onFlavorChange() {
     document.getElementById('results').style.display = 'none';
 }
 
+// バージョン情報を生成する関数
+function generateVersionInfo() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    // フォーマット: vYYYY.MMDD.HHmm (SHA)
+    const versionString = `v${year}.${month}${date}.${hours}${minutes}`;
+
+    // Git SHA（ビルド時に自動置換される）
+    const gitSha = '4ce94dd';
+
+    return `${versionString} (${gitSha})`;
+}
+
 // DOMContentLoaded で確実に初期化（Safari モバイル対応）
 document.addEventListener('DOMContentLoaded', function() {
+    // バージョン情報を設定
+    const versionInfo = document.getElementById('versionInfo');
+    if (versionInfo) {
+        versionInfo.textContent = generateVersionInfo();
+    }
+
     // select の初期値を確認・設定
     const flavor = document.getElementById('flavor');
     if (!flavor.value) {
