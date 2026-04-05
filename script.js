@@ -206,7 +206,7 @@ function displayResults(results) {
 
     // 追加生地の表示
     document.getElementById('resultAdditionalPieces').textContent = additionalPieces;
-    document.getElementById('materialsLabel').textContent = `（追加生地${additionalPieces}枚ぶん）`;
+    document.getElementById('materialsLabel').innerHTML = `（追加生地<span>${additionalPieces}</span>枚ぶん）`;
 
     // 素材ごとのグラム数を表示
     const materialsDetailDiv = document.getElementById('materialsDetail');
