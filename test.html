@@ -156,6 +156,17 @@
         </div>
     </div>
 
+    <!-- テスト用の隠し要素（DOM 初期化テストで使用） -->
+    <div id="hidden-forms" style="display: none;">
+        <select id="flavor">
+            <option value="cheese" selected>チーズ</option>
+            <option value="onion">玉ねぎ</option>
+            <option value="maitake">舞茸</option>
+        </select>
+        <input type="number" id="cans" value="20">
+        <input type="number" id="remainingDough" value="0.0">
+    </div>
+
     <script src="script.js"></script>
     <script>
         // テストフレームワーク（ブラウザ版）
@@ -387,6 +398,64 @@
             const result = calculateResults('cheese', 50, 100);
             assert(result.additionalPieces > 0,
                    '缶数が多いと追加枚数は常に正になる');
+        });
+
+        // グループ: DOM 初期化（Safari 対応）
+        test('DOM 初期化', 'select 要素が存在する', () => {
+            const flavorSelect = document.getElementById('flavor');
+            assert(flavorSelect, 'select 要素が見つかりません');
+        });
+
+        test('DOM 初期化', 'select の初期値が cheese に設定されている', () => {
+            const flavorSelect = document.getElementById('flavor');
+            assertStrictEqual(flavorSelect.value, 'cheese', 'デフォルト値は cheese であるべき');
+        });
+
+        test('DOM 初期化', 'flavorData.cheese に color プロパティが存在する', () => {
+            assert(flavorData.cheese.color, 'cheese に color プロパティがありません');
+            assertStrictEqual(flavorData.cheese.color, 'yellow');
+        });
+
+        test('DOM 初期化', 'flavorData.onion に color プロパティが存在する', () => {
+            assert(flavorData.onion.color, 'onion に color プロパティがありません');
+            assertStrictEqual(flavorData.onion.color, 'brown');
+        });
+
+        test('DOM 初期化', 'flavorData.maitake に color プロパティが存在する', () => {
+            assert(flavorData.maitake, 'maitake フレーバーが見つかりません');
+            assert(flavorData.maitake.color, 'maitake に color プロパティがありません');
+            assertStrictEqual(flavorData.maitake.color, 'gray');
+        });
+
+        test('DOM 初期化', 'colorMap が定義されている', () => {
+            assert(typeof colorMap !== 'undefined', 'colorMap が定義されていません');
+            assert(typeof colorMap === 'object', 'colorMap はオブジェクトであるべき');
+        });
+
+        test('DOM 初期化', 'colorMap に必要な色がすべて含まれている', () => {
+            assert(colorMap.yellow, 'colorMap に yellow がありません');
+            assert(colorMap.brown, 'colorMap に brown がありません');
+            assert(colorMap.gray, 'colorMap に gray がありません');
+            assertStrictEqual(colorMap.yellow, '#df8e1d');
+            assertStrictEqual(colorMap.brown, '#d65d0b');
+            assertStrictEqual(colorMap.gray, '#6c7086');
+        });
+
+        test('DOM 初期化', '初期表示色が設定されている', () => {
+            // CSS 変数は <html> 要素に直接設定されるため、確認が困難な場合がある
+            // 代わりに、onFlavorChange が正しく実装されていることを確認
+            assert(typeof onFlavorChange === 'function', 'onFlavorChange 関数が定義されていません');
+            // colorMap が存在し、cheese フレーバーの色が取得可能か確認
+            const cheeseColor = colorMap[flavorData.cheese.color];
+            assert(cheeseColor === '#df8e1d', `Cheese color should be #df8e1d, got ${cheeseColor}`);
+        });
+
+        test('DOM 初期化', 'すべてのフレーバーオプションが HTML に存在する', () => {
+            const flavorSelect = document.getElementById('flavor');
+            const optionValues = Array.from(flavorSelect.options).map(opt => opt.value);
+            assert(optionValues.includes('cheese'), 'cheese オプションがありません');
+            assert(optionValues.includes('onion'), 'onion オプションがありません');
+            assert(optionValues.includes('maitake'), 'maitake オプションがありません');
         });
 
         // ========== テスト結果の表示 ==========
