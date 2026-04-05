@@ -72,14 +72,14 @@ const flavorData = {
         color: 'brown',
         piecesPerCan: 6,
         reservePieces: 30,
-        baseUnit: { cans: 2, pieces: 16 },
+        baseUnit: { cans: 2, pieces: 12 },
         materials: {
             '米粉': 40.0,
             '砂糖（白）': 7.5,
             '太白ごま油': 20.0,
             '卵': 15.0,
             '片栗粉': 5.0,
-            '味噌': 1.56,
+            '味噌': 6.0,
             '柚子胡椒': 0.6,
             'アーモンドパウダー': 10.0
         }
@@ -260,29 +260,8 @@ function onFlavorChange() {
     document.getElementById('results').style.display = 'none';
 }
 
-// バージョン情報を生成する関数
-function generateVersionInfo() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const date = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    // フォーマット: vYYYY.MMDD.HHmm
-    const versionString = `v${year}.${month}${date}.${hours}${minutes}`;
-
-    return versionString;
-}
-
 // DOMContentLoaded で確実に初期化（Safari モバイル対応）
 document.addEventListener('DOMContentLoaded', function() {
-    // バージョン情報を設定
-    const versionInfo = document.getElementById('versionInfo');
-    if (versionInfo) {
-        versionInfo.textContent = generateVersionInfo();
-    }
-
     // select の初期値を確認・設定
     const flavor = document.getElementById('flavor');
     if (!flavor.value) {
