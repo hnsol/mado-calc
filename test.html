@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mado-calc テスト実行</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .test-results {
+            margin-top: 30px;
+        }
+
+        .test-group {
+            margin-bottom: 30px;
+        }
+
+        .group-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .test-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-item.pass {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .test-item.fail {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .test-icon {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .summary {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .summary-stat.total {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary-stat.pass {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .summary-stat.fail {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .final-message {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .final-message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .final-message.failure {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .error-message {
+            margin-top: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 mado-calc テスト実行</h1>
+        <p class="subtitle">計算ロジックとバリデーション機能のテスト</p>
+
+        <div id="test-output" class="test-results">
+            <p style="color: #666;">テスト実行中...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // テストフレームワーク（ブラウザ版）
+        let testCount = 0;
+        let passCount = 0;
+        let failCount = 0;
+        const testResults = {};
+
+        function test(groupName, description, fn) {
+            testCount++;
+            if (!testResults[groupName]) {
+                testResults[groupName] = [];
+            }
+
+            try {
+                fn();
+                passCount++;
+                testResults[groupName].push({ description, passed: true });
+            } catch (error) {
+                failCount++;
+                testResults[groupName].push({
+                    description,
+                    passed: false,
+                    error: error.message
+                });
+            }
+        }
+
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+
+        function assertStrictEqual(actual, expected) {
+            if (actual !== expected) {
+                throw new Error(`Expected ${expected}, got ${actual}`);
+            }
+        }
+
+        function closeToNumber(actual, expected, tolerance = 0.01) {
+            return Math.abs(actual - expected) < tolerance;
+        }
+
+        function assertClose(actual, expected, message) {
+            if (!closeToNumber(actual, expected)) {
+                throw new Error(message || `Expected ~${expected}, got ${actual}`);
+            }
+        }
+
+        // ========== テストの実行 ==========
+
+        // グループ: calculatePiecesPerGram
+        test('calculatePiecesPerGram', 'チーズの1枚あたりのグラム数を正確に計算', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const expectedTotal = Object.values(flavorData.cheese.materials).reduce((sum, g) => sum + g, 0);
+            const expected = expectedTotal / flavorData.cheese.baseUnit.pieces;
+            assertClose(gramsPerPiece, expected);
+        });
+
+        test('calculatePiecesPerGram', '玉ねぎの1枚あたりのグラム数を正確に計算', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.onion);
+            const expectedTotal = Object.values(flavorData.onion.materials).reduce((sum, g) => sum + g, 0);
+            const expected = expectedTotal / flavorData.onion.baseUnit.pieces;
+            assertClose(gramsPerPiece, expected);
+        });
+
+        test('calculatePiecesPerGram', 'チーズと玉ねぎの1枚あたりのグラム数が異なる', () => {
+            const cheesePPG = calculatePiecesPerGram(flavorData.cheese);
+            const onionPPG = calculatePiecesPerGram(flavorData.onion);
+            assert(cheesePPG !== onionPPG, 'グラム数が同じになってはいけません');
+        });
+
+        // グループ: calculateRemainingPieces
+        test('calculateRemainingPieces', '余り生地0gの場合、0枚を返す', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const remaining = calculateRemainingPieces(0, gramsPerPiece);
+            assertStrictEqual(remaining, 0);
+        });
+
+        test('calculateRemainingPieces', '余り生地が正の値の場合、適切な枚数を返す', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const remaining = calculateRemainingPieces(200, gramsPerPiece);
+            assert(remaining > 0 && remaining <= 200 / gramsPerPiece, 'Invalid remaining pieces');
+        });
+
+        test('calculateRemainingPieces', '余り生地は小数が正しく丸め込まれる', () => {
+            const gramsPerPiece = 10;
+            const remaining = calculateRemainingPieces(25.9, gramsPerPiece);
+            assertStrictEqual(remaining, 2, 'Should floor the result');
+        });
+
+        // グループ: calculateAdditionalPieces
+        test('calculateAdditionalPieces', 'チーズ・20缶・余り0gの場合、正確に計算される', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const remainingPieces = calculateRemainingPieces(0, gramsPerPiece);
+            const additional = calculateAdditionalPieces('cheese', 20, remainingPieces);
+            const expected = 20 * 10 + 50 - remainingPieces;
+            assertStrictEqual(additional, expected);
+        });
+
+        test('calculateAdditionalPieces', '玉ねぎ・10缶・余り100gの場合、正確に計算される', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.onion);
+            const remainingPieces = calculateRemainingPieces(100, gramsPerPiece);
+            const additional = calculateAdditionalPieces('onion', 10, remainingPieces);
+            const expected = 10 * 8 + 40 - remainingPieces;
+            assertStrictEqual(additional, expected);
+        });
+
+        test('calculateAdditionalPieces', '余り生地がある場合、追加枚数が減少する', () => {
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const remaining0 = calculateRemainingPieces(0, gramsPerPiece);
+            const remaining200 = calculateRemainingPieces(200, gramsPerPiece);
+            const additional0 = calculateAdditionalPieces('cheese', 20, remaining0);
+            const additional200 = calculateAdditionalPieces('cheese', 20, remaining200);
+            assert(additional0 > additional200, '余り生地が多いほど追加枚数は減少すべき');
+        });
+
+        // グループ: calculateMaterials
+        test('calculateMaterials', 'チーズの素材が7種類返される', () => {
+            const { materialsGrams } = calculateMaterials('cheese', 100);
+            assertStrictEqual(Object.keys(materialsGrams).length, 7);
+        });
+
+        test('calculateMaterials', '玉ねぎの素材が8種類返される', () => {
+            const { materialsGrams } = calculateMaterials('onion', 100);
+            assertStrictEqual(Object.keys(materialsGrams).length, 8);
+        });
+
+        test('calculateMaterials', 'チーズと玉ねぎで異なる素材が含まれる', () => {
+            const { materialsGrams: cheeseMaterials } = calculateMaterials('cheese', 100);
+            const { materialsGrams: onionMaterials } = calculateMaterials('onion', 100);
+            assert(cheeseMaterials['カシューチーズ'] > 0);
+            assert(!onionMaterials['カシューチーズ']);
+            assert(onionMaterials['玉ねぎパウダー'] > 0);
+            assert(!cheeseMaterials['玉ねぎパウダー']);
+        });
+
+        test('calculateMaterials', '素材の合計グラム数が totalAdditionalGrams と一致', () => {
+            const { materialsGrams, totalAdditionalGrams } = calculateMaterials('cheese', 100);
+            const sum = Object.values(materialsGrams).reduce((s, g) => s + g, 0);
+            assertClose(sum, totalAdditionalGrams);
+        });
+
+        // グループ: validateInputs
+        test('validateInputs', 'フレーバー未選択は失敗', () => {
+            const result = validateInputs('', 20, 0);
+            assertStrictEqual(result.valid, false);
+        });
+
+        test('validateInputs', '無効なフレーバーIDは失敗', () => {
+            const result = validateInputs('unknown', 20, 0);
+            assertStrictEqual(result.valid, false);
+        });
+
+        test('validateInputs', '缶数0は失敗', () => {
+            const result = validateInputs('cheese', 0, 0);
+            assertStrictEqual(result.valid, false);
+        });
+
+        test('validateInputs', '余り生地が負の値は失敗', () => {
+            const result = validateInputs('cheese', 20, -10);
+            assertStrictEqual(result.valid, false);
+        });
+
+        test('validateInputs', '正常な入力は成功', () => {
+            const result = validateInputs('cheese', 20, 100);
+            assertStrictEqual(result.valid, true);
+        });
+
+        // グループ: calculateResults
+        test('calculateResults', 'チーズ・20缶・余り0gの統合計算', () => {
+            const result = calculateResults('cheese', 20, 0);
+            assertStrictEqual(result.flavorId, 'cheese');
+            assertStrictEqual(result.flavorName, 'チーズ');
+            assertStrictEqual(result.cans, 20);
+        });
+
+        test('calculateResults', '統合計算の結果オブジェクトが必要なキーを持つ', () => {
+            const result = calculateResults('cheese', 20, 0);
+            const requiredKeys = ['flavorId', 'flavorName', 'cans', 'piecesPerCan', 'reservePieces',
+                                 'remainingGrams', 'remainingPieces', 'additionalPieces',
+                                 'totalAdditionalGrams', 'materialsGrams'];
+            requiredKeys.forEach(key => {
+                assert(key in result, `Missing key: ${key}`);
+            });
+        });
+
+        test('calculateResults', 'チーズと玉ねぎで異なる結果が得られる', () => {
+            const cheesResult = calculateResults('cheese', 20, 100);
+            const onionResult = calculateResults('onion', 20, 100);
+            assert(cheesResult.totalAdditionalGrams !== onionResult.totalAdditionalGrams,
+                   'Total grams should differ');
+        });
+
+        // グループ: 警告メッセージケース
+        test('警告メッセージ', '缶数が少なく余り生地が多い場合、追加枚数がマイナスになる', () => {
+            // チーズ: 1缶 * 10枚 + 50予備 = 60枚
+            // 1枚あたり: 約12.7g
+            // 余り1000gで: 1000 / 12.7 ≈ 78枚 > 60枚
+            // → 追加枚数がマイナスになる
+            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+            const result = calculateResults('cheese', 1, 1000);
+            assert(result.additionalPieces <= 0,
+                   `additionalPieces should be <= 0, got ${result.additionalPieces}`);
+        });
+
+        test('警告メッセージ', '余り生地だけで足りる場合、追加枚数が0になる', () => {
+            // チーズ: 基本ユニット = 2缶20枚 ≈ 254.8g
+            // 1枚あたり: 254.8 / 20 ≈ 12.74g
+            // 1缶 * 10 + 50予備 = 60枚
+            // 60枚必要なグラム数: 60 * 12.74 ≈ 764.4g
+            // 余り生地がそれ以上あれば、追加枚数 <= 0
+            const result = calculateResults('cheese', 1, 800);
+            assert(result.additionalPieces <= 0,
+                   '余り生地が十分にあれば、追加枚数は0以下になる');
+        });
+
+        test('警告メッセージ', '玉ねぎでも余り生地が多い場合、追加枚数がマイナスになる', () => {
+            // 玉ねぎ: 1缶 * 8枚 + 40予備 = 48枚
+            // 基本: 2缶16枚
+            const result = calculateResults('onion', 1, 1000);
+            assert(result.additionalPieces <= 0,
+                   'Onion should also have negative additional pieces with large remaining dough');
+        });
+
+        test('警告メッセージ', '缶数が多い場合は追加枚数が正になる', () => {
+            // 缶数を多くすれば、余り生地の影響を上回る
+            const result = calculateResults('cheese', 50, 100);
+            assert(result.additionalPieces > 0,
+                   '缶数が多いと追加枚数は常に正になる');
+        });
+
+        // ========== テスト結果の表示 ==========
+        function renderResults() {
+            const output = document.getElementById('test-output');
+            let html = '';
+
+            // グループごとにテスト結果を表示
+            for (const [groupName, results] of Object.entries(testResults)) {
+                html += `<div class="test-group">`;
+                html += `<div class="group-title">${groupName}</div>`;
+
+                for (const result of results) {
+                    const className = result.passed ? 'pass' : 'fail';
+                    const icon = result.passed ? '✓' : '✗';
+                    html += `<div class="test-item ${className}">`;
+                    html += `<span class="test-icon">${icon}</span>`;
+                    html += `<span>${result.description}`;
+                    if (result.error) {
+                        html += `<div class="error-message">エラー: ${result.error}</div>`;
+                    }
+                    html += `</span></div>`;
+                }
+
+                html += `</div>`;
+            }
+
+            // サマリー
+            const successClass = failCount === 0 ? 'success' : 'failure';
+            const message = failCount === 0 ? '🎉 全テストが成功しました！' : `❌ ${failCount}個のテストが失敗しました`;
+
+            html += `
+                <div class="summary">
+                    <div class="summary-title">テスト結果サマリー</div>
+                    <div class="summary-stat total">
+                        <span>総テスト数</span>
+                        <span>${testCount}</span>
+                    </div>
+                    <div class="summary-stat pass">
+                        <span>成功</span>
+                        <span>${passCount}</span>
+                    </div>
+                    <div class="summary-stat fail">
+                        <span>失敗</span>
+                        <span>${failCount}</span>
+                    </div>
+                    <div class="final-message ${successClass}">${message}</div>
+                </div>
+            `;
+
+            output.innerHTML = html;
+        }
+
+        // テスト実行と結果表示
+        window.addEventListener('load', renderResults);
+    </script>
+</body>
+</html>

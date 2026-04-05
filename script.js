@@ -33,66 +33,101 @@ const flavorData = {
     }
 };
 
+// バリデーション関数
+function validateInputs(flavorId, cans, remainingGrams) {
+    if (!flavorId || !flavorData[flavorId]) {
+        return { valid: false, error: 'フレーバーを選択してください' };
+    }
+    if (!cans || cans < 1 || !Number.isInteger(cans)) {
+        return { valid: false, error: '缶数は1以上の整数を入力してください' };
+    }
+    if (remainingGrams < 0) {
+        return { valid: false, error: '余り生地のグラム数は0以上を入力してください' };
+    }
+    return { valid: true };
+}
+
+// 1枚あたりのグラム数を計算する純粋関数
+function calculatePiecesPerGram(flavor) {
+    const totalMaterialsPerBaseUnit = Object.values(flavor.materials).reduce((sum, g) => sum + g, 0);
+    return totalMaterialsPerBaseUnit / flavor.baseUnit.pieces;
+}
+
+// 余り生地で作れる枚数を計算する純粋関数
+function calculateRemainingPieces(remainingGrams, gramsPerPiece) {
+    return Math.floor(remainingGrams / gramsPerPiece);
+}
+
+// 追加すべき枚数を計算する純粋関数
+function calculateAdditionalPieces(flavorId, cans, remainingPieces) {
+    const flavor = flavorData[flavorId];
+    const totalPieces = cans * flavor.piecesPerCan + flavor.reservePieces;
+    return totalPieces - remainingPieces;
+}
+
+// 各素材のグラム数を計算する純粋関数
+function calculateMaterials(flavorId, additionalPieces) {
+    const flavor = flavorData[flavorId];
+    const materialsGrams = {};
+    let totalAdditionalGrams = 0;
+
+    for (const [materialName, gramsPerBaseUnit] of Object.entries(flavor.materials)) {
+        const gramsPerPieceForMaterial = gramsPerBaseUnit / flavor.baseUnit.pieces;
+        const gramsNeeded = gramsPerPieceForMaterial * additionalPieces;
+        materialsGrams[materialName] = gramsNeeded;
+        totalAdditionalGrams += gramsNeeded;
+    }
+
+    return { materialsGrams, totalAdditionalGrams };
+}
+
+// 全計算を統合する純粋関数
+function calculateResults(flavorId, cans, remainingGrams) {
+    const flavor = flavorData[flavorId];
+    const gramsPerPiece = calculatePiecesPerGram(flavor);
+    const remainingPieces = calculateRemainingPieces(remainingGrams, gramsPerPiece);
+    const additionalPieces = calculateAdditionalPieces(flavorId, cans, remainingPieces);
+    const { materialsGrams, totalAdditionalGrams } = calculateMaterials(flavorId, additionalPieces);
+
+    return {
+        flavorId,
+        flavorName: flavor.name,
+        cans,
+        piecesPerCan: flavor.piecesPerCan,
+        reservePieces: flavor.reservePieces,
+        remainingGrams,
+        remainingPieces,
+        additionalPieces,
+        totalAdditionalGrams,
+        materialsGrams
+    };
+}
+
+// DOM入力を取得して計算・表示を行う関数
 function calculate() {
     const flavorId = document.getElementById('flavor').value;
     const cans = parseInt(document.getElementById('cans').value);
     const remainingGrams = parseFloat(document.getElementById('remainingDough').value) || 0;
 
     // バリデーション
-    if (!flavorId) {
-        alert('フレーバーを選択してください');
-        return;
-    }
-    if (!cans || cans < 1) {
-        alert('缶数は1以上の整数を入力してください');
+    const validation = validateInputs(flavorId, cans, remainingGrams);
+    if (!validation.valid) {
+        alert(validation.error);
         return;
     }
 
-    const flavor = flavorData[flavorId];
-    const baseUnit = flavor.baseUnit;
-
-    // 1枚あたりのグラム数を計算
-    const totalMaterialsPerBaseUnit = Object.values(flavor.materials).reduce((sum, g) => sum + g, 0);
-    const gramsPerPiece = totalMaterialsPerBaseUnit / baseUnit.pieces;
-
-    // 余り生地で作れる枚数
-    const remainingPieces = Math.floor(remainingGrams / gramsPerPiece);
-
-    // 缶数に対応する枚数（予備含む）
-    const totalPieces = cans * flavor.piecesPerCan + flavor.reservePieces;
-
-    // 追加すべき枚数
-    const additionalPieces = totalPieces - remainingPieces;
-
-    // 各素材のグラム数を計算
-    const materialsGrams = {};
-    let totalAdditionalGrams = 0;
-
-    for (const [materialName, gramsPerBaseUnit] of Object.entries(flavor.materials)) {
-        const gramsPerPieceForMaterial = gramsPerBaseUnit / baseUnit.pieces;
-        const gramsNeeded = gramsPerPieceForMaterial * additionalPieces;
-        materialsGrams[materialName] = gramsNeeded;
-        totalAdditionalGrams += gramsNeeded;
-    }
+    // 計算
+    const results = calculateResults(flavorId, cans, remainingGrams);
 
     // 結果を表示
-    displayResults(
-        flavorId,
-        flavor.name,
-        cans,
-        flavor.piecesPerCan,
-        flavor.reservePieces,
-        remainingGrams,
-        remainingPieces,
-        additionalPieces,
-        totalAdditionalGrams,
-        materialsGrams
-    );
+    displayResults(results);
 }
 
-function displayResults(flavorId, flavorName, cans, piecesPerCan, reservePieces,
-                        remainingGrams, remainingPieces, additionalPieces,
-                        totalAdditionalGrams, materialsGrams) {
+function displayResults(results) {
+    const { flavorId, flavorName, cans, piecesPerCan, reservePieces,
+            remainingGrams, remainingPieces, additionalPieces,
+            totalAdditionalGrams, materialsGrams } = results;
+
     // 缶数分の枚数と予備枚数を計算
     const cansPieces = cans * piecesPerCan;
     const totalPieces = cansPieces + reservePieces;
