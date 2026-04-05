@@ -165,7 +165,18 @@
         </select>
         <input type="number" id="cans" value="20">
         <input type="number" id="remainingDough" value="0.0">
-        <div id="results" style="display: none;"></div>
+        <div id="results" style="display: none;">
+            <div id="warningMessage" style="display: none;"></div>
+            <span id="resultFlavor"></span>
+            <span id="resultCans"></span>
+            <span id="resultTotalPieces"></span>
+            <span id="resultRemainingGrams"></span>
+            <span id="resultRemainingPieces"></span>
+            <span id="resultAdditionalPieces"></span>
+            <span id="materialsLabel"></span>
+            <div id="materialsDetail"></div>
+            <div id="totalMaterials"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
@@ -500,6 +511,42 @@
             // 実際の input/change イベント動作は、ブラウザで手動確認が必要
             // (test.html の dispatchEvent では実際の input イベントと異なる動作をするため)
             assert(true, 'input/change リスナーが登録されています（手動確認推奨）');
+        });
+
+        // グループ: 表示結果 DOM
+        test('表示結果 DOM', 'displayResults() が材料行を 2 カラム構造で描画する', () => {
+            const result = calculateResults('cheese', 20, 0);
+            displayResults(result);
+
+            const rows = document.querySelectorAll('#materialsDetail .materials-row');
+            assertStrictEqual(rows.length, Object.keys(result.materialsGrams).length);
+
+            const firstRow = rows[0];
+            assert(firstRow.querySelector('.materials-name'), '材料名要素がありません');
+            assert(firstRow.querySelector('.materials-value'), '数量要素がありません');
+            assert(firstRow.querySelector('.materials-amount'), '数量の強調要素がありません');
+            assert(firstRow.querySelector('.materials-unit'), '単位要素がありません');
+            assertStrictEqual(firstRow.querySelector('.materials-unit').textContent, 'g');
+        });
+
+        test('表示結果 DOM', 'displayResults() が合計行を専用クラス付きで描画する', () => {
+            const result = calculateResults('cheese', 20, 0);
+            displayResults(result);
+
+            const totalRow = document.querySelector('#totalMaterials .materials-row-total');
+            assert(totalRow, '合計行が描画されていません');
+            assertStrictEqual(totalRow.querySelector('.materials-name').textContent, '合計');
+            assertStrictEqual(totalRow.querySelector('.materials-unit').textContent, 'g');
+        });
+
+        test('表示結果 DOM', 'displayResults() が必要枚数の数字だけをハイライトする', () => {
+            const result = calculateResults('sansho', 20, 0);
+            displayResults(result);
+
+            const totalPieces = document.getElementById('resultTotalPieces');
+            const accents = totalPieces.querySelectorAll('.result-accent');
+            assertStrictEqual(accents.length, 3);
+            assertStrictEqual(totalPieces.textContent, '160 + 予備40 = 200');
         });
 
         // グループ: プリセットボタン動作

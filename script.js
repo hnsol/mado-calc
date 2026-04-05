@@ -198,7 +198,10 @@ function displayResults(results) {
     // 入力情報の表示
     document.getElementById('resultFlavor').textContent = flavorName;
     document.getElementById('resultCans').textContent = cans;
-    document.getElementById('resultTotalPieces').textContent = `${cansPieces} + 予備${reservePieces} = ${totalPieces}`;
+    document.getElementById('resultTotalPieces').innerHTML =
+        `<span class="result-accent">${cansPieces}</span> + 予備` +
+        `<span class="result-accent">${reservePieces}</span> = ` +
+        `<span class="result-accent">${totalPieces}</span>`;
 
     // 余り生地の表示
     document.getElementById('resultRemainingGrams').textContent = remainingGrams.toFixed(1);
@@ -222,7 +225,17 @@ function displayResults(results) {
 
         const valueSpan = document.createElement('span');
         valueSpan.className = 'materials-value';
-        valueSpan.textContent = `${grams.toFixed(1)} g`;
+        const amountSpan = document.createElement('span');
+        amountSpan.className = 'materials-amount';
+        amountSpan.textContent = grams.toFixed(1);
+
+        const unitSpan = document.createElement('span');
+        unitSpan.className = 'materials-unit';
+        unitSpan.textContent = 'g';
+
+        valueSpan.appendChild(amountSpan);
+        valueSpan.appendChild(document.createTextNode(' '));
+        valueSpan.appendChild(unitSpan);
 
         row.appendChild(nameSpan);
         row.appendChild(valueSpan);
@@ -240,7 +253,17 @@ function displayResults(results) {
 
     const totalValue = document.createElement('span');
     totalValue.className = 'materials-value';
-    totalValue.textContent = `${totalAdditionalGrams.toFixed(1)} g`;
+    const totalAmount = document.createElement('span');
+    totalAmount.className = 'materials-amount';
+    totalAmount.textContent = totalAdditionalGrams.toFixed(1);
+
+    const totalUnit = document.createElement('span');
+    totalUnit.className = 'materials-unit';
+    totalUnit.textContent = 'g';
+
+    totalValue.appendChild(totalAmount);
+    totalValue.appendChild(document.createTextNode(' '));
+    totalValue.appendChild(totalUnit);
 
     totalRow.appendChild(totalLabel);
     totalRow.appendChild(totalValue);

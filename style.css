@@ -341,7 +341,16 @@ button.clear-button:hover {
     margin-bottom: 0;
 }
 
-span {
+.result-accent {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+#resultFlavor,
+#resultCans,
+#resultRemainingGrams,
+#resultRemainingPieces,
+#resultAdditionalPieces {
     font-weight: 700;
     color: var(--accent-color);
 }
@@ -358,18 +367,22 @@ span {
 
 #materialsDetail {
     display: grid;
-    gap: 2px;
+    gap: 0;
 }
 
 .materials-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(92px, auto);
     align-items: baseline;
-    column-gap: 16px;
-    padding: 8px 0;
+    column-gap: 14px;
+    padding: 2px 0;
     border-bottom: 1px solid rgba(76, 79, 105, 0.08);
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.22;
+}
+
+#materialsDetail .materials-row:last-child {
+    border-bottom: none;
 }
 
 .materials-name {
@@ -379,22 +392,32 @@ span {
 }
 
 .materials-value {
-    color: color-mix(in srgb, var(--accent-color) 82%, var(--catppuccin-text));
-    font-weight: 700;
+    color: var(--catppuccin-text);
+    font-weight: 600;
     text-align: right;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
 }
 
+.materials-amount {
+    color: color-mix(in srgb, var(--accent-color) 82%, var(--catppuccin-text));
+    font-weight: 700;
+}
+
+.materials-unit {
+    color: var(--catppuccin-text);
+    font-weight: 500;
+}
+
 .materials-total {
-    padding-top: 8px;
-    margin-top: 8px;
+    padding-top: 4px;
+    margin-top: 4px;
     border-top: 2px solid var(--accent-color);
 }
 
 .materials-row-total {
     border-bottom: none;
-    padding: 6px 0 0;
+    padding: 2px 0 0;
     font-size: 15px;
 }
 
