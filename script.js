@@ -213,17 +213,39 @@ function displayResults(results) {
     materialsDetailDiv.innerHTML = '';
 
     for (const [materialName, grams] of Object.entries(materialsGrams)) {
-        const p = document.createElement('p');
-        p.textContent = `${materialName}: ${grams.toFixed(1)} g`;
-        materialsDetailDiv.appendChild(p);
+        const row = document.createElement('div');
+        row.className = 'materials-row';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'materials-name';
+        nameSpan.textContent = materialName;
+
+        const valueSpan = document.createElement('span');
+        valueSpan.className = 'materials-value';
+        valueSpan.textContent = `${grams.toFixed(1)} g`;
+
+        row.appendChild(nameSpan);
+        row.appendChild(valueSpan);
+        materialsDetailDiv.appendChild(row);
     }
 
     // 合計欄を表示
     const totalDiv = document.getElementById('totalMaterials');
-    const totalP = document.createElement('p');
-    totalP.textContent = `合計: ${totalAdditionalGrams.toFixed(1)} g`;
+    const totalRow = document.createElement('div');
+    totalRow.className = 'materials-row materials-row-total';
+
+    const totalLabel = document.createElement('span');
+    totalLabel.className = 'materials-name';
+    totalLabel.textContent = '合計';
+
+    const totalValue = document.createElement('span');
+    totalValue.className = 'materials-value';
+    totalValue.textContent = `${totalAdditionalGrams.toFixed(1)} g`;
+
+    totalRow.appendChild(totalLabel);
+    totalRow.appendChild(totalValue);
     totalDiv.innerHTML = '';
-    totalDiv.appendChild(totalP);
+    totalDiv.appendChild(totalRow);
 
     // 結果セクションを表示
     document.getElementById('results').style.display = 'block';
