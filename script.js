@@ -2,6 +2,7 @@
 const flavorData = {
     cheese: {
         name: 'チーズ',
+        color: 'yellow',
         piecesPerCan: 10,
         reservePieces: 50,
         baseUnit: { cans: 2, pieces: 20 },
@@ -17,6 +18,7 @@ const flavorData = {
     },
     onion: {
         name: '玉ねぎ',
+        color: 'brown',
         piecesPerCan: 8,
         reservePieces: 40,
         baseUnit: { cans: 2, pieces: 16 },
@@ -29,6 +31,23 @@ const flavorData = {
             '塩': 1.20,
             '玉ねぎパウダー': 3.0,
             '酒粕': 5.0
+        }
+    },
+    maitake: {
+        name: '舞茸',
+        color: 'gray',
+        piecesPerCan: 8,
+        reservePieces: 40,
+        baseUnit: { cans: 2, pieces: 16 },
+        materials: {
+            '米粉': 47.25,
+            '砂糖（白）': 21.0,
+            '太白ごま油': 24.15,
+            '卵': 12.6,
+            '片栗粉': 10.5,
+            '塩': 1.239,
+            '舞茸パウダー': 3.15,
+            '竹炭': 0.2268
         }
     }
 };
@@ -189,13 +208,18 @@ function clearInputs() {
     document.getElementById('results').style.display = 'none';
 }
 
+// セマンティック色名から16進数カラーコードへのマッピング
+const colorMap = {
+    yellow: '#df8e1d',  // Catppuccin Yellow
+    brown: '#d65d0b',   // Catppuccin Brown
+    gray: '#6c7086'     // Catppuccin Overlay 0
+};
+
 function onFlavorChange() {
     const flavorId = document.getElementById('flavor').value;
-    const colors = {
-        cheese: '#df8e1d',  // Catppuccin Yellow
-        onion: '#d65d0b'    // Catppuccin Brown
-    };
-    document.documentElement.style.setProperty('--accent-color', colors[flavorId] || '#df8e1d');
+    const flavor = flavorData[flavorId];
+    const accentColor = flavor ? colorMap[flavor.color] || '#df8e1d' : '#df8e1d';
+    document.documentElement.style.setProperty('--accent-color', accentColor);
     // 計算結果を消去
     document.getElementById('results').style.display = 'none';
 }
