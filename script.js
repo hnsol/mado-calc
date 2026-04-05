@@ -18,7 +18,7 @@ const flavorData = {
     },
     onion: {
         name: '玉ねぎ',
-        color: 'brown',
+        color: 'orange',
         piecesPerCan: 8,
         reservePieces: 40,
         baseUnit: { cans: 2, pieces: 16 },
@@ -48,6 +48,40 @@ const flavorData = {
             '塩': 1.239,
             '舞茸パウダー': 3.15,
             '竹炭': 0.2268
+        }
+    },
+    sansho: {
+        name: '山椒',
+        color: 'dark green',
+        piecesPerCan: 8,
+        reservePieces: 40,
+        baseUnit: { cans: 2, pieces: 16 },
+        materials: {
+            '米粉': 58.5,
+            '砂糖（白）': 13.0,
+            '太白ごま油': 26.65,
+            '卵': 19.5,
+            '片栗粉': 7.8,
+            '塩': 1.56,
+            'よもぎ': 6.5,
+            '山椒': 3.25
+        }
+    },
+    miso: {
+        name: 'シン味噌',
+        color: 'dark brown',
+        piecesPerCan: 12,
+        reservePieces: 40,
+        baseUnit: { cans: 2, pieces: 16 },
+        materials: {
+            '米粉': 40.0,
+            '砂糖（白）': 7.5,
+            '太白ごま油': 20.0,
+            '卵': 15.0,
+            '片栗粉': 5.0,
+            '味噌': 1.56,
+            '柚子胡椒': 0.6,
+            'アーモンドパウダー': 10.0
         }
     }
 };
@@ -210,9 +244,12 @@ function clearInputs() {
 
 // セマンティック色名から16進数カラーコードへのマッピング
 const colorMap = {
-    yellow: '#df8e1d',  // Catppuccin Yellow
-    brown: '#d65d0b',   // Catppuccin Brown
-    gray: '#6c7086'     // Catppuccin Overlay 0
+    yellow: '#df8e1d',      // Catppuccin Yellow
+    orange: '#fe8019',      // Catppuccin Orange
+    brown: '#d65d0b',       // Catppuccin Brown
+    gray: '#6c7086',        // Catppuccin Overlay 0
+    'dark green': '#40a02b', // Catppuccin Green
+    'dark brown': '#8b5f34'  // Dark Brown
 };
 
 function onFlavorChange() {
