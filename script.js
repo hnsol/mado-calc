@@ -1,7 +1,7 @@
 // フレーバーごとのデータ定義
 const flavorData = {
     cheese: {
-        name: 'チーズ',
+        name: '🧀 チーズ',
         color: 'yellow',
         piecesPerCan: 10,
         reservePieces: 50,
@@ -17,7 +17,7 @@ const flavorData = {
         }
     },
     onion: {
-        name: '玉ねぎ',
+        name: '🧅 玉ねぎ',
         color: 'orange',
         piecesPerCan: 8,
         reservePieces: 40,
@@ -34,7 +34,7 @@ const flavorData = {
         }
     },
     maitake: {
-        name: '舞茸',
+        name: '🍄‍🟫 舞茸',
         color: 'gray',
         piecesPerCan: 8,
         reservePieces: 40,
@@ -51,7 +51,7 @@ const flavorData = {
         }
     },
     sansho: {
-        name: '山椒',
+        name: '🌿 山椒',
         color: 'dark green',
         piecesPerCan: 8,
         reservePieces: 40,
@@ -68,7 +68,7 @@ const flavorData = {
         }
     },
     miso: {
-        name: '味噌',
+        name: '🫘 味噌',
         color: 'brown',
         piecesPerCan: 6,
         reservePieces: 30,
