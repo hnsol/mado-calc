@@ -68,9 +68,9 @@ const flavorData = {
         }
     },
     miso: {
-        name: 'シン味噌',
+        name: '味噌',
         color: 'brown',
-        piecesPerCan: 12,
+        piecesPerCan: 6,
         reservePieces: 40,
         baseUnit: { cans: 2, pieces: 16 },
         materials: {
