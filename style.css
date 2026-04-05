@@ -92,11 +92,15 @@ h3 {
 }
 
 .input-group {
-    margin-bottom: 0;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     gap: 8px;
     align-items: center;
+    margin-bottom: 12px;
+}
+
+.input-group:last-child {
+    margin-bottom: 0;
 }
 
 .input-group label {
@@ -116,6 +120,19 @@ label {
 
 @media (max-width: 480px) {
     label {
+        font-size: 12px;
+    }
+}
+
+.unit {
+    font-weight: 600;
+    color: #333;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .unit {
         font-size: 12px;
     }
 }
