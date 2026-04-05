@@ -297,6 +297,16 @@ span {
     color: var(--accent-color);
 }
 
+#materialsLabel {
+    color: var(--catppuccin-text);
+    font-weight: inherit;
+}
+
+#materialsLabel > span {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
 #materialsDetail p {
     display: flex;
     justify-content: space-between;
