@@ -69,7 +69,7 @@ const flavorData = {
     },
     miso: {
         name: 'シン味噌',
-        color: 'dark brown',
+        color: 'brown',
         piecesPerCan: 12,
         reservePieces: 40,
         baseUnit: { cans: 2, pieces: 16 },
@@ -244,12 +244,11 @@ function clearInputs() {
 
 // セマンティック色名から16進数カラーコードへのマッピング
 const colorMap = {
-    yellow: '#df8e1d',      // Catppuccin Yellow
-    orange: '#fe8019',      // Catppuccin Orange
-    brown: '#d65d0b',       // Catppuccin Brown
-    gray: '#6c7086',        // Catppuccin Overlay 0
-    'dark green': '#40a02b', // Catppuccin Green
-    'dark brown': '#8b5f34'  // Dark Brown
+    yellow: '#df8e1d',       // Catppuccin Yellow
+    orange: '#fe8019',       // Catppuccin Orange
+    brown: '#d65d0b',        // Catppuccin Brown
+    gray: '#6c7086',         // Catppuccin Overlay 0
+    'dark green': '#40a02b'  // Catppuccin Green
 };
 
 function onFlavorChange() {
@@ -270,13 +269,10 @@ function generateVersionInfo() {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
-    // フォーマット: vYYYY.MMDD.HHmm (SHA)
+    // フォーマット: vYYYY.MMDD.HHmm
     const versionString = `v${year}.${month}${date}.${hours}${minutes}`;
 
-    // Git SHA（ビルド時に自動置換される）
-    const gitSha = '4ce94dd';
-
-    return `${versionString} (${gitSha})`;
+    return versionString;
 }
 
 // DOMContentLoaded で確実に初期化（Safari モバイル対応）
