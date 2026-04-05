@@ -18,8 +18,7 @@ body {
     color: var(--catppuccin-text);
     background: linear-gradient(135deg, var(--catppuccin-base) 0%, var(--catppuccin-surface0) 100%);
     padding: 20px;
-    min-height: 100vh;
-    padding-bottom: 108px;
+    min-height: 100dvh;
 }
 
 .container {
@@ -29,9 +28,10 @@ body {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 12px rgba(76, 79, 105, 0.1);
-    min-height: calc(100vh - 40px);
-    display: flex;
-    flex-direction: column;
+    min-height: calc(100dvh - 40px);
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 16px;
 }
 
 @media (min-width: 640px) {
@@ -76,14 +76,11 @@ h3 {
 /* 入力セクション */
 .input-section {
     background-color: white;
-    padding: 18px;
+    padding: 14px;
     border-radius: 16px;
     border: 1px solid var(--catppuccin-surface1);
     box-shadow: 0 10px 24px rgba(76, 79, 105, 0.08);
-    position: sticky;
-    bottom: 20px;
-    z-index: 10;
-    margin-top: auto;
+    align-self: end;
 }
 
 @media (min-width: 640px) {
@@ -95,9 +92,9 @@ h3 {
 .toolbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 52px 64px;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 #flavor {
@@ -109,13 +106,13 @@ h3 {
 }
 
 .toolbar-button {
-    width: 52px;
-    height: 52px;
-    min-height: 52px;
+    width: 46px;
+    height: 46px;
+    min-height: 46px;
     padding: 0;
     border-radius: 50%;
     justify-self: center;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 1;
     color: white;
     box-shadow: 0 8px 18px rgba(223, 142, 29, 0.2);
@@ -129,7 +126,7 @@ h3 {
 
 .input-panel {
     display: grid;
-    gap: 14px;
+    gap: 10px;
 }
 
 label {
@@ -140,7 +137,7 @@ label {
 }
 
 .field-block {
-    padding: 14px 14px 12px;
+    padding: 10px 12px;
     background: linear-gradient(180deg, #ffffff 0%, #faf8f2 100%);
     border: 1px solid var(--catppuccin-surface1);
     border-radius: 16px;
@@ -150,7 +147,7 @@ label {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .unit {
@@ -179,11 +176,11 @@ select {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 10px;
-    padding: 6px 12px 6px 16px;
+    gap: 8px;
+    padding: 4px 10px 4px 14px;
     background-color: #fffefb;
     border: 1px solid #d9d8cf;
-    border-radius: 18px;
+    border-radius: 16px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -191,7 +188,7 @@ select {
     width: 100%;
     min-width: 0;
     padding: 0;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 700;
     border: none;
     border-radius: 0;
@@ -213,16 +210,16 @@ input[type="number"]:focus {
 .preset-buttons {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 12px;
+    gap: 6px;
+    margin-top: 8px;
 }
 
 .preset-btn {
     width: 100%;
     min-width: 0;
-    min-height: 40px;
-    padding: 0 8px;
-    font-size: 12px;
+    min-height: 34px;
+    padding: 0 4px;
+    font-size: 11px;
     font-weight: 600;
     background-color: #f2efe4;
     color: #333;
@@ -302,9 +299,10 @@ button.clear-button:hover {
 
 /* 結果セクション */
 .results-section {
-    margin-bottom: 20px;
     padding-top: 0;
-    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
 }
 
 .result-group {
@@ -400,13 +398,13 @@ span {
 @media (max-width: 480px) {
     body {
         padding: 14px;
-        padding-bottom: 96px;
     }
 
     .container {
         padding: 14px;
         border-radius: 18px;
-        min-height: calc(100vh - 28px);
+        min-height: calc(100dvh - 28px);
+        gap: 12px;
     }
 
     .toolbar {
@@ -415,26 +413,26 @@ span {
     }
 
     .toolbar-button {
-        width: 46px;
-        height: 46px;
-        min-height: 46px;
-        font-size: 20px;
+        width: 42px;
+        height: 42px;
+        min-height: 42px;
+        font-size: 18px;
     }
 
     .field-block {
-        padding: 12px;
+        padding: 8px 10px;
     }
 
     .field-row {
-        gap: 10px;
+        gap: 8px;
     }
 
     .input-shell {
-        padding: 6px 10px 6px 14px;
+        padding: 3px 8px 3px 12px;
     }
 
     .input-shell input[type="number"] {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .unit {
@@ -442,12 +440,13 @@ span {
     }
 
     .preset-buttons {
-        gap: 6px;
+        gap: 4px;
+        margin-top: 6px;
     }
 
     .preset-btn {
-        min-height: 38px;
-        padding: 0 4px;
-        font-size: 11px;
+        min-height: 32px;
+        padding: 0 2px;
+        font-size: 10px;
     }
 }
