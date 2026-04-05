@@ -54,7 +54,7 @@ const flavorData = {
     miso: {
         name: '味噌',
         piecesPerCan: 6,
-        reservePieces: 40,
+        reservePieces: 30,
         baseUnit: { cans: 2, pieces: 16 },
         materials: {
             '米粉': 40.0,
