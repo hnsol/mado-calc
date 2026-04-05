@@ -224,15 +224,24 @@ function onFlavorChange() {
     document.getElementById('results').style.display = 'none';
 }
 
-// フレーバー選択時にアクセント色を変更して、計算結果を消去（addEventListener併用でSafari対応）
-document.getElementById('flavor').addEventListener('change', onFlavorChange);
-
-// 初期表示時にアクセント色を設定
-document.documentElement.style.setProperty('--accent-color', '#df8e1d');
-
-// Enterキーで計算できるようにする
-document.getElementById('remainingDough').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        calculate();
+// DOMContentLoaded で確実に初期化（Safari モバイル対応）
+document.addEventListener('DOMContentLoaded', function() {
+    // select の初期値を確認・設定
+    const flavor = document.getElementById('flavor');
+    if (!flavor.value) {
+        flavor.value = 'cheese';
     }
+
+    // フレーバー選択時にアクセント色を変更して、計算結果を消去
+    flavor.addEventListener('change', onFlavorChange);
+
+    // 初期表示時にアクセント色を設定
+    document.documentElement.style.setProperty('--accent-color', '#df8e1d');
+
+    // Enterキーで計算できるようにする
+    document.getElementById('remainingDough').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            calculate();
+        }
+    });
 });
