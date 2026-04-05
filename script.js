@@ -231,22 +231,54 @@ function displayResults(results) {
 
 function setCans(value) {
     document.getElementById('cans').value = value;
+    syncPresetButtons('cans');
     clearResults();
 }
 
 function setRemainingDough(value) {
     document.getElementById('remainingDough').value = value.toFixed(1);
+    syncPresetButtons('remainingDough');
     clearResults();
 }
 
 function clearInputs() {
     document.getElementById('cans').value = '20';
     document.getElementById('remainingDough').value = '0.0';
+    syncPresetButtons('cans');
+    syncPresetButtons('remainingDough');
     document.getElementById('results').style.display = 'none';
 }
 
 function clearResults() {
     document.getElementById('results').style.display = 'none';
+}
+
+function syncPresetButtons(targetId) {
+    const input = document.getElementById(targetId);
+    if (!input) {
+        return;
+    }
+
+    const currentValue = input.value;
+    document.querySelectorAll(`.preset-btn[data-target="${targetId}"]`).forEach((button) => {
+        const isActive = button.dataset.value === currentValue;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+}
+
+function syncFlavorSelectLabels() {
+    const flavorSelect = document.getElementById('flavor');
+    if (!flavorSelect) {
+        return;
+    }
+
+    Array.from(flavorSelect.options).forEach((option) => {
+        const flavor = flavorData[option.value];
+        if (flavor) {
+            option.textContent = flavor.name;
+        }
+    });
 }
 
 // セマンティック色名から16進数カラーコードへのマッピング
@@ -271,6 +303,7 @@ function onFlavorChange() {
 document.addEventListener('DOMContentLoaded', function() {
     // select の初期値を確認・設定
     const flavor = document.getElementById('flavor');
+    syncFlavorSelectLabels();
     if (!flavor.value) {
         flavor.value = 'cheese';
     }
@@ -279,7 +312,9 @@ document.addEventListener('DOMContentLoaded', function() {
     flavor.addEventListener('change', onFlavorChange);
 
     // 初期表示時にアクセント色を設定
-    document.documentElement.style.setProperty('--accent-color', '#df8e1d');
+    onFlavorChange();
+    syncPresetButtons('cans');
+    syncPresetButtons('remainingDough');
 
     // Enterキーで計算できるようにする
     document.getElementById('remainingDough').addEventListener('keypress', function(e) {
@@ -289,10 +324,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 缶数が変更されたときに計算結果を消去
-    document.getElementById('cans').addEventListener('input', clearResults);
-    document.getElementById('cans').addEventListener('change', clearResults);
+    document.getElementById('cans').addEventListener('input', function() {
+        syncPresetButtons('cans');
+        clearResults();
+    });
+    document.getElementById('cans').addEventListener('change', function() {
+        syncPresetButtons('cans');
+        clearResults();
+    });
 
     // 余り生地が変更されたときに計算結果を消去
-    document.getElementById('remainingDough').addEventListener('input', clearResults);
-    document.getElementById('remainingDough').addEventListener('change', clearResults);
+    document.getElementById('remainingDough').addEventListener('input', function() {
+        syncPresetButtons('remainingDough');
+        clearResults();
+    });
+    document.getElementById('remainingDough').addEventListener('change', function() {
+        syncPresetButtons('remainingDough');
+        clearResults();
+    });
 });

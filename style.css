@@ -19,6 +19,7 @@ body {
     background: linear-gradient(135deg, var(--catppuccin-base) 0%, var(--catppuccin-surface0) 100%);
     padding: 20px;
     min-height: 100vh;
+    padding-bottom: 108px;
 }
 
 .container {
@@ -28,6 +29,9 @@ body {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 12px rgba(76, 79, 105, 0.1);
+    min-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
 }
 
 @media (min-width: 640px) {
@@ -57,107 +61,146 @@ h3 {
     color: var(--catppuccin-text);
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* 入力セクション */
 .input-section {
     background-color: white;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 16px;
     border: 1px solid var(--catppuccin-surface1);
+    box-shadow: 0 10px 24px rgba(76, 79, 105, 0.08);
+    position: sticky;
+    bottom: 20px;
+    z-index: 10;
+    margin-top: auto;
 }
 
 @media (min-width: 640px) {
     .input-section {
-        padding: 20px;
+        padding: 22px;
     }
 }
 
-.input-row {
+.toolbar {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) 52px 64px;
     gap: 12px;
-    margin-bottom: 8px;
     align-items: center;
-}
-
-@media (max-width: 480px) {
-    .input-row {
-        gap: 8px;
-    }
+    margin-bottom: 18px;
 }
 
 #flavor {
     width: 100%;
-    margin-bottom: 12px;
+    min-width: 0;
+    margin-bottom: 0;
+    padding-right: 36px;
+    background-color: #fcfbf7;
 }
 
-.input-group {
+.toolbar-button {
+    width: 52px;
+    height: 52px;
+    min-height: 52px;
+    padding: 0;
+    border-radius: 50%;
+    justify-self: center;
+    font-size: 22px;
+    line-height: 1;
+    color: white;
+    box-shadow: 0 8px 18px rgba(223, 142, 29, 0.2);
+}
+
+.toolbar .clear-button {
+    background-color: #aeb1c4;
+    color: white;
+    box-shadow: none;
+}
+
+.input-panel {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 0;
-}
-
-
-.input-group label {
-    margin-bottom: 0;
-}
-
-.input-row ~ .input-group {
-    margin-bottom: 12px;
+    gap: 14px;
 }
 
 label {
     font-weight: 600;
     color: #333;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-    label {
-        font-size: 12px;
-    }
+.field-block {
+    padding: 14px 14px 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #faf8f2 100%);
+    border: 1px solid var(--catppuccin-surface1);
+    border-radius: 16px;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
 }
 
 .unit {
     font-weight: 600;
     color: #333;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
-}
-
-@media (max-width: 480px) {
-    .unit {
-        font-size: 12px;
-    }
 }
 
 select,
 input[type="number"] {
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #d7d7ce;
+    border-radius: 14px;
     font-family: inherit;
+    background-color: white;
+    color: var(--catppuccin-text);
 }
 
 select {
     width: 100%;
 }
 
-.input-row input[type="number"] {
-    width: auto;
-    min-width: 0;
+.input-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 16px;
+    background-color: #fffefb;
+    border: 1px solid #d9d8cf;
+    border-radius: 18px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-@media (min-width: 640px) {
-    select,
-    input[type="number"] {
-        padding: 10px;
-        font-size: 15px;
-    }
+.input-shell input[type="number"] {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    font-size: 26px;
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #2f3144;
+}
+
+.input-shell input[type="number"]:focus {
+    box-shadow: none;
 }
 
 select:focus,
@@ -168,23 +211,23 @@ input[type="number"]:focus {
 }
 
 .preset-buttons {
-    display: flex;
-    justify-content: space-between;
-    gap: 4px;
-    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
 }
 
 .preset-btn {
-    min-width: 44px;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    font-size: 10px;
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 8px;
+    font-size: 12px;
     font-weight: 600;
-    background-color: #e0e0e0;
+    background-color: #f2efe4;
     color: #333;
-    border: 1px solid #ccc;
-    border-radius: 50%;
+    border: 1px solid #dad5c1;
+    border-radius: 999px;
     cursor: pointer;
     transition: all 0.2s ease;
     -webkit-appearance: none;
@@ -196,13 +239,10 @@ input[type="number"]:focus {
     flex-shrink: 0;
 }
 
-@media (min-width: 640px) {
-    .preset-btn {
-        min-width: 50px;
-        width: 50px;
-        height: 50px;
-        font-size: 11px;
-    }
+.dough-presets .preset-btn {
+    border-radius: 14px;
+    background-color: #f8f5ed;
+    border-style: dashed;
 }
 
 .preset-btn:hover {
@@ -223,36 +263,23 @@ input[type="number"]:focus {
     box-shadow: 0 0 0 2px rgba(223, 142, 29, 0.3);
 }
 
-.button-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-@media (min-width: 640px) {
-    .button-group {
-        gap: 12px;
-    }
+.preset-btn.is-active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 8px 18px rgba(223, 142, 29, 0.2);
 }
 
 button {
-    padding: 10px;
+    padding: 12px;
     font-size: 14px;
     font-weight: 600;
     background-color: var(--accent-color);
     color: #222;
     border: none;
-    border-radius: 4px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-}
-
-@media (min-width: 640px) {
-    button {
-        padding: 12px;
-        font-size: 15px;
-    }
+    transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
@@ -261,6 +288,7 @@ button:hover {
 
 button:active {
     opacity: 0.75;
+    transform: translateY(1px);
 }
 
 button.clear-button {
@@ -274,8 +302,9 @@ button.clear-button:hover {
 
 /* 結果セクション */
 .results-section {
-    margin-top: 24px;
+    margin-bottom: 20px;
     padding-top: 0;
+    flex: 1 1 auto;
 }
 
 .result-group {
@@ -366,4 +395,59 @@ span {
     margin-bottom: 12px;
     border-left: 4px solid #d32f2f;
     font-size: 15px;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 14px;
+        padding-bottom: 96px;
+    }
+
+    .container {
+        padding: 14px;
+        border-radius: 18px;
+        min-height: calc(100vh - 28px);
+    }
+
+    .toolbar {
+        grid-template-columns: minmax(0, 1fr) 46px 56px;
+        gap: 8px;
+    }
+
+    .toolbar-button {
+        width: 46px;
+        height: 46px;
+        min-height: 46px;
+        font-size: 20px;
+    }
+
+    .field-block {
+        padding: 12px;
+    }
+
+    .field-row {
+        gap: 10px;
+    }
+
+    .input-shell {
+        padding: 6px 10px 6px 14px;
+    }
+
+    .input-shell input[type="number"] {
+        font-size: 24px;
+    }
+
+    .unit {
+        font-size: 13px;
+    }
+
+    .preset-buttons {
+        gap: 6px;
+    }
+
+    .preset-btn {
+        min-height: 38px;
+        padding: 0 4px;
+        font-size: 11px;
+    }
 }

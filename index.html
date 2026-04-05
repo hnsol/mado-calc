@@ -8,51 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="input-section">
-            <select id="flavor" onchange="onFlavorChange()">
-                <option value="cheese" selected>チーズ</option>
-                <option value="onion">玉ねぎ</option>
-                <option value="maitake">舞茸</option>
-                <option value="sansho">山椒</option>
-                <option value="miso">味噌</option>
-            </select>
-
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="cans">数量</label>
-                    <input type="number" id="cans" placeholder="整数で入力" min="1" value="20">
-                    <span class="unit">缶</span>
-                </div>
-
-                <div class="input-group">
-                    <label for="remainingDough">余り</label>
-                    <input type="number" id="remainingDough" placeholder="小数点1位まで" value="0.0">
-                    <span class="unit">g</span>
-                </div>
-            </div>
-
-            <div class="preset-buttons">
-                <button type="button" onclick="setCans(10); return false;" class="preset-btn">10缶</button>
-                <button type="button" onclick="setCans(20); return false;" class="preset-btn">20缶</button>
-                <button type="button" onclick="setCans(30); return false;" class="preset-btn">30缶</button>
-                <button type="button" onclick="setCans(40); return false;" class="preset-btn">40缶</button>
-                <button type="button" onclick="setCans(50); return false;" class="preset-btn">50缶</button>
-            </div>
-
-            <div class="preset-buttons">
-                <button type="button" onclick="setRemainingDough(100); return false;" class="preset-btn">100g</button>
-                <button type="button" onclick="setRemainingDough(200); return false;" class="preset-btn">200g</button>
-                <button type="button" onclick="setRemainingDough(300); return false;" class="preset-btn">300g</button>
-                <button type="button" onclick="setRemainingDough(400); return false;" class="preset-btn">400g</button>
-                <button type="button" onclick="setRemainingDough(500); return false;" class="preset-btn">500g</button>
-            </div>
-
-            <div class="button-group">
-                <button onclick="clearInputs()" class="clear-button">C</button>
-                <button onclick="calculate()">＝</button>
-            </div>
-        </div>
-
         <div id="results" class="results-section" style="display:none;">
             <div id="warningMessage" class="warning-message" style="display:none;">
                 注意：余り生地が多すぎるようです
@@ -67,6 +22,57 @@
                 <h3>必要グラム数<span id="materialsLabel"></span></h3>
                 <div id="materialsDetail"></div>
                 <div id="totalMaterials" class="materials-total"></div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <div class="toolbar">
+                <label class="sr-only" for="flavor">フレーバー</label>
+                <select id="flavor" onchange="onFlavorChange()">
+                    <option value="cheese" selected>チーズ</option>
+                    <option value="onion">玉ねぎ</option>
+                    <option value="maitake">舞茸</option>
+                    <option value="sansho">山椒</option>
+                    <option value="miso">味噌</option>
+                </select>
+                <button onclick="clearInputs()" class="clear-button toolbar-button">C</button>
+                <button onclick="calculate()" class="toolbar-button">＝</button>
+            </div>
+
+            <div class="input-panel">
+                <div class="field-block">
+                    <div class="field-row">
+                        <label for="cans">数量</label>
+                        <div class="input-shell">
+                            <input type="number" id="cans" min="1" value="20">
+                            <span class="unit">缶</span>
+                        </div>
+                    </div>
+                    <div class="preset-buttons cans-presets">
+                        <button type="button" onclick="setCans(10); return false;" class="preset-btn" data-target="cans" data-value="10">10缶</button>
+                        <button type="button" onclick="setCans(20); return false;" class="preset-btn" data-target="cans" data-value="20">20缶</button>
+                        <button type="button" onclick="setCans(30); return false;" class="preset-btn" data-target="cans" data-value="30">30缶</button>
+                        <button type="button" onclick="setCans(40); return false;" class="preset-btn" data-target="cans" data-value="40">40缶</button>
+                        <button type="button" onclick="setCans(50); return false;" class="preset-btn" data-target="cans" data-value="50">50缶</button>
+                    </div>
+                </div>
+
+                <div class="field-block">
+                    <div class="field-row">
+                        <label for="remainingDough">余り</label>
+                        <div class="input-shell">
+                            <input type="number" id="remainingDough" value="0.0">
+                            <span class="unit">g</span>
+                        </div>
+                    </div>
+                    <div class="preset-buttons dough-presets">
+                        <button type="button" onclick="setRemainingDough(100); return false;" class="preset-btn" data-target="remainingDough" data-value="100.0">100g</button>
+                        <button type="button" onclick="setRemainingDough(200); return false;" class="preset-btn" data-target="remainingDough" data-value="200.0">200g</button>
+                        <button type="button" onclick="setRemainingDough(300); return false;" class="preset-btn" data-target="remainingDough" data-value="300.0">300g</button>
+                        <button type="button" onclick="setRemainingDough(400); return false;" class="preset-btn" data-target="remainingDough" data-value="400.0">400g</button>
+                        <button type="button" onclick="setRemainingDough(500); return false;" class="preset-btn" data-target="remainingDough" data-value="500.0">500g</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
