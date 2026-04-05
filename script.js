@@ -231,15 +231,21 @@ function displayResults(results) {
 
 function setCans(value) {
     document.getElementById('cans').value = value;
+    clearResults();
 }
 
 function setRemainingDough(value) {
-    document.getElementById('remainingDough').value = value;
+    document.getElementById('remainingDough').value = value.toFixed(1);
+    clearResults();
 }
 
 function clearInputs() {
     document.getElementById('cans').value = '20';
     document.getElementById('remainingDough').value = '0.0';
+    document.getElementById('results').style.display = 'none';
+}
+
+function clearResults() {
     document.getElementById('results').style.display = 'none';
 }
 
@@ -281,4 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
             calculate();
         }
     });
+
+    // 缶数が変更されたときに計算結果を消去
+    document.getElementById('cans').addEventListener('input', clearResults);
+    document.getElementById('cans').addEventListener('change', clearResults);
+
+    // 余り生地が変更されたときに計算結果を消去
+    document.getElementById('remainingDough').addEventListener('input', clearResults);
+    document.getElementById('remainingDough').addEventListener('change', clearResults);
 });

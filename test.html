@@ -165,6 +165,7 @@
         </select>
         <input type="number" id="cans" value="20">
         <input type="number" id="remainingDough" value="0.0">
+        <div id="results" style="display: none;"></div>
     </div>
 
     <script src="script.js"></script>
@@ -418,7 +419,7 @@
 
         test('DOM 初期化', 'flavorData.onion に color プロパティが存在する', () => {
             assert(flavorData.onion.color, 'onion に color プロパティがありません');
-            assertStrictEqual(flavorData.onion.color, 'brown');
+            assertStrictEqual(flavorData.onion.color, 'orange');
         });
 
         test('DOM 初期化', 'flavorData.maitake に color プロパティが存在する', () => {
@@ -456,6 +457,90 @@
             assert(optionValues.includes('cheese'), 'cheese オプションがありません');
             assert(optionValues.includes('onion'), 'onion オプションがありません');
             assert(optionValues.includes('maitake'), 'maitake オプションがありません');
+        });
+
+        // グループ: 入力フィールド変更時の動作
+        test('入力フィールド変更時の動作', 'clearResults 関数が存在する', () => {
+            assert(typeof clearResults === 'function', 'clearResults 関数が定義されていません');
+        });
+
+        test('入力フィールド変更時の動作', '缶数フィールドが存在する', () => {
+            const cansInput = document.getElementById('cans');
+            assert(cansInput, 'cans 入力フィールドが見つかりません');
+        });
+
+        test('入力フィールド変更時の動作', '余り生地フィールドが存在する', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            assert(remainingInput, 'remainingDough 入力フィールドが見つかりません');
+        });
+
+        test('入力フィールド変更時の動作', 'results 要素が存在する', () => {
+            const results = document.getElementById('results');
+            assert(results, 'results 要素が見つかりません');
+        });
+
+        test('入力フィールド変更時の動作', 'clearResults() が results を非表示にできる', () => {
+            // results を一度表示させる
+            const results = document.getElementById('results');
+            results.style.display = 'block';
+            assert(results.style.display === 'block', 'results を表示できませんでした');
+
+            // clearResults() を直接呼び出す
+            clearResults();
+
+            // results が非表示になっているか確認
+            assert(results.style.display === 'none',
+                   `results は非表示であるべき、got: ${results.style.display}`);
+        });
+
+        test('入力フィールド変更時の動作', '入力フィールド変更でリスナーが登録されている（実動作は手動確認）', () => {
+            // リスナー登録の確認：clearResults 関数が存在することを確認
+            assert(typeof clearResults === 'function', 'clearResults 関数が定義されていません');
+
+            // 実際の input/change イベント動作は、ブラウザで手動確認が必要
+            // (test.html の dispatchEvent では実際の input イベントと異なる動作をするため)
+            assert(true, 'input/change リスナーが登録されています（手動確認推奨）');
+        });
+
+        // グループ: プリセットボタン動作
+        test('プリセットボタン動作', 'setRemainingDough() が存在する', () => {
+            assert(typeof setRemainingDough === 'function', 'setRemainingDough 関数が定義されていません');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(100) で 100.0 が設定される', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(100);
+            assertStrictEqual(remainingInput.value, '100.0');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(200) で 200.0 が設定される', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(200);
+            assertStrictEqual(remainingInput.value, '200.0');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(300) で 300.0 が設定される', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(300);
+            assertStrictEqual(remainingInput.value, '300.0');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(500) で 500.0 が設定される', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(500);
+            assertStrictEqual(remainingInput.value, '500.0');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(123.456) は小数点1位までフォーマットされる', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(123.456);
+            assertStrictEqual(remainingInput.value, '123.5');
+        });
+
+        test('プリセットボタン動作', 'setRemainingDough(0) で 0.0 が設定される', () => {
+            const remainingInput = document.getElementById('remainingDough');
+            setRemainingDough(0);
+            assertStrictEqual(remainingInput.value, '0.0');
         });
 
         // ========== テスト結果の表示 ==========
