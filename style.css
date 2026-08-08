@@ -6,6 +6,7 @@
 
 :root {
     --accent-color: #df8e1d;
+    --row-accent-color: #df8e1d;
     --catppuccin-base: #fffdf5;
     --catppuccin-surface0: #f5f5f0;
     --catppuccin-surface1: #e8e8e0;
@@ -384,6 +385,16 @@ button.clear-button:hover {
 
 #materialsDetail .materials-row:nth-child(even) {
     background: rgba(76, 79, 105, 0.06);
+}
+
+#materialsDetail .materials-row:nth-child(odd) .materials-name,
+#materialsDetail .materials-row:nth-child(odd) .materials-amount,
+#materialsDetail .materials-row:nth-child(odd) .materials-unit {
+    color: color-mix(in srgb, var(--row-accent-color) 55%, var(--catppuccin-text));
+}
+
+#materialsDetail .materials-row:nth-child(even) .materials-amount {
+    color: var(--catppuccin-text);
 }
 
 .materials-name {

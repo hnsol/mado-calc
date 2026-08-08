@@ -335,11 +335,18 @@ const colorMap = {
     'dark green': '#40a02b'  // Catppuccin Green
 };
 
+// 材料リストの行色分け用（グレーは基本文字色と近く判別できないため差し替え）
+const rowAccentMap = {
+    gray: '#7287fd'  // Catppuccin Lavender
+};
+
 function onFlavorChange() {
     const flavorId = document.getElementById('flavor').value;
     const flavor = flavorData[flavorId];
     const accentColor = flavor ? colorMap[flavor.color] || '#df8e1d' : '#df8e1d';
     document.documentElement.style.setProperty('--accent-color', accentColor);
+    const rowAccentColor = flavor ? (rowAccentMap[flavor.color] || accentColor) : accentColor;
+    document.documentElement.style.setProperty('--row-accent-color', rowAccentColor);
     // 計算結果を消去
     document.getElementById('results').style.display = 'none';
 }
