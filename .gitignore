@@ -30,3 +30,6 @@ build/
 # Claude Code
 .claude/launch.json
 .claude/settings.local.json
+
+# Local decision records (not published)
+docs/decisions/
