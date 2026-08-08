@@ -368,6 +368,8 @@ button.clear-button:hover {
 #materialsDetail {
     display: grid;
     gap: 0;
+    max-width: 16em;
+    margin-inline: auto;
 }
 
 .materials-row {
@@ -375,14 +377,13 @@ button.clear-button:hover {
     grid-template-columns: minmax(0, 1fr) minmax(92px, auto);
     align-items: baseline;
     column-gap: 14px;
-    padding: 2px 0;
-    border-bottom: 1px solid rgba(76, 79, 105, 0.08);
+    padding: 2px 6px;
     font-size: 14px;
     line-height: 1.22;
 }
 
-#materialsDetail .materials-row:last-child {
-    border-bottom: none;
+#materialsDetail .materials-row:nth-child(even) {
+    background: rgba(76, 79, 105, 0.06);
 }
 
 .materials-name {
@@ -413,11 +414,12 @@ button.clear-button:hover {
     padding-top: 4px;
     margin-top: 4px;
     border-top: 2px solid var(--accent-color);
+    max-width: 16em;
+    margin-inline: auto;
 }
 
 .materials-row-total {
-    border-bottom: none;
-    padding: 2px 0 0;
+    padding: 2px 6px 0;
     font-size: 15px;
 }
 
