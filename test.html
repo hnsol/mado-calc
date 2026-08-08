@@ -353,7 +353,7 @@
         test('calculateResults', 'チーズ・20缶・余り0gの統合計算', () => {
             const result = calculateResults('cheese', 20, 0);
             assertStrictEqual(result.flavorId, 'cheese');
-            assertStrictEqual(result.flavorName, 'チーズ');
+            assertStrictEqual(result.flavorName, '🧀 チーズ');
             assertStrictEqual(result.cans, 20);
         });
 

@@ -352,46 +352,53 @@ function onFlavorChange() {
 }
 
 // DOMContentLoaded で確実に初期化（Safari モバイル対応）
-document.addEventListener('DOMContentLoaded', function() {
-    // select の初期値を確認・設定
-    const flavor = document.getElementById('flavor');
-    syncFlavorSelectLabels();
-    if (!flavor.value) {
-        flavor.value = 'cheese';
-    }
-
-    // フレーバー選択時にアクセント色を変更して、計算結果を消去
-    flavor.addEventListener('change', onFlavorChange);
-
-    // 初期表示時にアクセント色を設定
-    onFlavorChange();
-    syncPresetButtons('cans');
-    syncPresetButtons('remainingDough');
-
-    // Enterキーで計算できるようにする
-    document.getElementById('remainingDough').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            calculate();
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+        // select の初期値を確認・設定
+        const flavor = document.getElementById('flavor');
+        syncFlavorSelectLabels();
+        if (!flavor.value) {
+            flavor.value = 'cheese';
         }
-    });
 
-    // 缶数が変更されたときに計算結果を消去
-    document.getElementById('cans').addEventListener('input', function() {
-        syncPresetButtons('cans');
-        clearResults();
-    });
-    document.getElementById('cans').addEventListener('change', function() {
-        syncPresetButtons('cans');
-        clearResults();
-    });
+        // フレーバー選択時にアクセント色を変更して、計算結果を消去
+        flavor.addEventListener('change', onFlavorChange);
 
-    // 余り生地が変更されたときに計算結果を消去
-    document.getElementById('remainingDough').addEventListener('input', function() {
+        // 初期表示時にアクセント色を設定
+        onFlavorChange();
+        syncPresetButtons('cans');
         syncPresetButtons('remainingDough');
-        clearResults();
+
+        // Enterキーで計算できるようにする
+        document.getElementById('remainingDough').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+
+        // 缶数が変更されたときに計算結果を消去
+        document.getElementById('cans').addEventListener('input', function() {
+            syncPresetButtons('cans');
+            clearResults();
+        });
+        document.getElementById('cans').addEventListener('change', function() {
+            syncPresetButtons('cans');
+            clearResults();
+        });
+
+        // 余り生地が変更されたときに計算結果を消去
+        document.getElementById('remainingDough').addEventListener('input', function() {
+            syncPresetButtons('remainingDough');
+            clearResults();
+        });
+        document.getElementById('remainingDough').addEventListener('change', function() {
+            syncPresetButtons('remainingDough');
+            clearResults();
+        });
     });
-    document.getElementById('remainingDough').addEventListener('change', function() {
-        syncPresetButtons('remainingDough');
-        clearResults();
-    });
-});
+}
+
+// Node.js（テスト実行）環境向けエクスポート
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { flavorData, validateInputs, calculatePiecesPerGram, calculateRemainingPieces, calculateAdditionalPieces, calculateMaterials, calculateResults };
+}

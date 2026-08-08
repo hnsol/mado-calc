@@ -2,142 +2,8 @@
 // Node.js の標準 assert モジュールを使用
 const assert = require('assert');
 
-// script.js から flavorData と計算関数をエクスポート
-const flavorData = {
-    cheese: {
-        name: 'チーズ',
-        piecesPerCan: 10,
-        reservePieces: 50,
-        baseUnit: { cans: 2, pieces: 20 },
-        materials: {
-            '米粉': 41.25,
-            '砂糖（白）': 15.33,
-            '太白ごま油': 16.25,
-            '卵': 10.42,
-            '片栗粉': 7.67,
-            '塩': 1.53,
-            'カシューチーズ': 20.0
-        }
-    },
-    onion: {
-        name: '玉ねぎ',
-        piecesPerCan: 8,
-        reservePieces: 40,
-        baseUnit: { cans: 2, pieces: 16 },
-        materials: {
-            '米粉': 45.0,
-            '砂糖（白）': 20.0,
-            '太白ごま油': 23.0,
-            '卵': 12.0,
-            '片栗粉': 10.0,
-            '塩': 1.20,
-            '玉ねぎパウダー': 3.0,
-            '酒粕': 5.0
-        }
-    },
-    sansho: {
-        name: '山椒',
-        piecesPerCan: 8,
-        reservePieces: 40,
-        baseUnit: { cans: 2, pieces: 16 },
-        materials: {
-            '米粉': 58.5,
-            '砂糖（白）': 13.0,
-            '太白ごま油': 26.65,
-            '卵': 19.5,
-            '片栗粉': 7.8,
-            '塩': 1.56,
-            'よもぎ': 6.5,
-            '山椒': 3.25
-        }
-    },
-    miso: {
-        name: '味噌',
-        piecesPerCan: 6,
-        reservePieces: 30,
-        baseUnit: { cans: 2, pieces: 12 },
-        materials: {
-            '米粉': 40.0,
-            '砂糖（白）': 7.5,
-            '太白ごま油': 20.0,
-            '卵': 15.0,
-            '片栗粉': 5.0,
-            '味噌': 6.0,
-            '柚子胡椒': 0.6,
-            'アーモンドパウダー': 10.0
-        }
-    }
-};
-
-// バリデーション関数
-function validateInputs(flavorId, cans, remainingGrams) {
-    if (!flavorId || !flavorData[flavorId]) {
-        return { valid: false, error: 'フレーバーを選択してください' };
-    }
-    if (!cans || cans < 1 || !Number.isInteger(cans)) {
-        return { valid: false, error: '缶数は1以上の整数を入力してください' };
-    }
-    if (remainingGrams < 0) {
-        return { valid: false, error: '余り生地のグラム数は0以上を入力してください' };
-    }
-    return { valid: true };
-}
-
-// 1枚あたりのグラム数を計算する純粋関数
-function calculatePiecesPerGram(flavor) {
-    const totalMaterialsPerBaseUnit = Object.values(flavor.materials).reduce((sum, g) => sum + g, 0);
-    return totalMaterialsPerBaseUnit / flavor.baseUnit.pieces;
-}
-
-// 余り生地で作れる枚数を計算する純粋関数
-function calculateRemainingPieces(remainingGrams, gramsPerPiece) {
-    return Math.floor(remainingGrams / gramsPerPiece);
-}
-
-// 追加すべき枚数を計算する純粋関数
-function calculateAdditionalPieces(flavorId, cans, remainingPieces) {
-    const flavor = flavorData[flavorId];
-    const totalPieces = cans * flavor.piecesPerCan + flavor.reservePieces;
-    return totalPieces - remainingPieces;
-}
-
-// 各素材のグラム数を計算する純粋関数
-function calculateMaterials(flavorId, additionalPieces) {
-    const flavor = flavorData[flavorId];
-    const materialsGrams = {};
-    let totalAdditionalGrams = 0;
-
-    for (const [materialName, gramsPerBaseUnit] of Object.entries(flavor.materials)) {
-        const gramsPerPieceForMaterial = gramsPerBaseUnit / flavor.baseUnit.pieces;
-        const gramsNeeded = gramsPerPieceForMaterial * additionalPieces;
-        materialsGrams[materialName] = gramsNeeded;
-        totalAdditionalGrams += gramsNeeded;
-    }
-
-    return { materialsGrams, totalAdditionalGrams };
-}
-
-// 全計算を統合する純粋関数
-function calculateResults(flavorId, cans, remainingGrams) {
-    const flavor = flavorData[flavorId];
-    const gramsPerPiece = calculatePiecesPerGram(flavor);
-    const remainingPieces = calculateRemainingPieces(remainingGrams, gramsPerPiece);
-    const additionalPieces = calculateAdditionalPieces(flavorId, cans, remainingPieces);
-    const { materialsGrams, totalAdditionalGrams } = calculateMaterials(flavorId, additionalPieces);
-
-    return {
-        flavorId,
-        flavorName: flavor.name,
-        cans,
-        piecesPerCan: flavor.piecesPerCan,
-        reservePieces: flavor.reservePieces,
-        remainingGrams,
-        remainingPieces,
-        additionalPieces,
-        totalAdditionalGrams,
-        materialsGrams
-    };
-}
+// script.js から flavorData と計算関数を読み込む（二重管理を防ぐため）
+const { flavorData, validateInputs, calculatePiecesPerGram, calculateRemainingPieces, calculateAdditionalPieces, calculateMaterials, calculateResults } = require('./script.js');
 
 // ========================================
 // テストスイート
@@ -373,7 +239,7 @@ console.log('========================================\n');
 test('チーズ・20缶・余り0gの統合計算', () => {
     const result = calculateResults('cheese', 20, 0);
     assert.strictEqual(result.flavorId, 'cheese');
-    assert.strictEqual(result.flavorName, 'チーズ');
+    assert.strictEqual(result.flavorName, '🧀 チーズ');
     assert.strictEqual(result.cans, 20);
     assert.strictEqual(result.remainingGrams, 0);
     assert(result.additionalPieces > 0);
@@ -382,7 +248,7 @@ test('チーズ・20缶・余り0gの統合計算', () => {
 test('玉ねぎ・10缶・余り100gの統合計算', () => {
     const result = calculateResults('onion', 10, 100);
     assert.strictEqual(result.flavorId, 'onion');
-    assert.strictEqual(result.flavorName, '玉ねぎ');
+    assert.strictEqual(result.flavorName, '🧅 玉ねぎ');
     assert.strictEqual(result.cans, 10);
     assert.strictEqual(result.remainingGrams, 100);
 });
@@ -390,7 +256,7 @@ test('玉ねぎ・10缶・余り100gの統合計算', () => {
 test('山椒・10缶・余り100gの統合計算', () => {
     const result = calculateResults('sansho', 10, 100);
     assert.strictEqual(result.flavorId, 'sansho');
-    assert.strictEqual(result.flavorName, '山椒');
+    assert.strictEqual(result.flavorName, '🌿 山椒');
     assert.strictEqual(result.cans, 10);
     assert.strictEqual(result.remainingGrams, 100);
 });
@@ -398,7 +264,7 @@ test('山椒・10缶・余り100gの統合計算', () => {
 test('味噌・10缶・余り100gの統合計算', () => {
     const result = calculateResults('miso', 10, 100);
     assert.strictEqual(result.flavorId, 'miso');
-    assert.strictEqual(result.flavorName, '味噌');
+    assert.strictEqual(result.flavorName, '🫘 味噌');
     assert.strictEqual(result.cans, 10);
     assert.strictEqual(result.remainingGrams, 100);
 });
