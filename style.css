@@ -369,15 +369,16 @@ button.clear-button:hover {
 #materialsDetail {
     display: grid;
     gap: 0;
-    max-width: 16em;
-    margin-inline: auto;
+    grid-template-columns: max-content minmax(92px, max-content);
+    justify-content: center;
+    column-gap: 10px;
 }
 
 .materials-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(92px, auto);
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
     align-items: baseline;
-    column-gap: 14px;
     padding: 2px 6px;
     font-size: 14px;
     line-height: 1.22;
@@ -422,11 +423,13 @@ button.clear-button:hover {
 }
 
 .materials-total {
+    display: grid;
+    grid-template-columns: max-content minmax(92px, max-content);
+    justify-content: center;
+    column-gap: 10px;
     padding-top: 4px;
     margin-top: 4px;
     border-top: 2px solid var(--accent-color);
-    max-width: 16em;
-    margin-inline: auto;
 }
 
 .materials-row-total {
@@ -505,8 +508,9 @@ button.clear-button:hover {
         font-size: 10px;
     }
 
-    .materials-row {
-        grid-template-columns: minmax(0, 1fr) minmax(88px, auto);
-        column-gap: 12px;
+    #materialsDetail,
+    .materials-total {
+        grid-template-columns: max-content minmax(88px, max-content);
+        column-gap: 8px;
     }
 }
