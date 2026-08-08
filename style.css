@@ -366,12 +366,18 @@ button.clear-button:hover {
     font-weight: 700;
 }
 
-#materialsDetail {
+.materials-table {
     display: grid;
-    gap: 0;
     grid-template-columns: max-content minmax(92px, max-content);
     justify-content: center;
     column-gap: 10px;
+}
+
+#materialsDetail {
+    display: grid;
+    gap: 0;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
 }
 
 .materials-row {
@@ -424,9 +430,8 @@ button.clear-button:hover {
 
 .materials-total {
     display: grid;
-    grid-template-columns: max-content minmax(92px, max-content);
-    justify-content: center;
-    column-gap: 10px;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
     padding-top: 4px;
     margin-top: 4px;
     border-top: 2px solid var(--accent-color);
@@ -508,8 +513,7 @@ button.clear-button:hover {
         font-size: 10px;
     }
 
-    #materialsDetail,
-    .materials-total {
+    .materials-table {
         grid-template-columns: max-content minmax(88px, max-content);
         column-gap: 8px;
     }
