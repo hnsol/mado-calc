@@ -167,15 +167,10 @@
         <input type="number" id="remainingDough" value="0.0">
         <div id="results" style="display: none;">
             <div id="warningMessage" style="display: none;"></div>
-            <span id="resultFlavor"></span>
-            <span id="resultCans"></span>
-            <span id="resultTotalPieces"></span>
-            <span id="resultRemainingGrams"></span>
-            <span id="resultRemainingPieces"></span>
-            <span id="resultAdditionalPieces"></span>
-            <span id="materialsLabel"></span>
-            <div id="materialsDetail"></div>
-            <div id="totalMaterials"></div>
+            <div id="materialsSection">
+                <div id="materialsDetail"></div>
+                <div id="totalMaterials"></div>
+            </div>
         </div>
     </div>
 
@@ -219,7 +214,7 @@
             }
         }
 
-        function closeToNumber(actual, expected, tolerance = 0.01) {
+        function closeToNumber(actual, expected, tolerance = 1e-6) {
             return Math.abs(actual - expected) < tolerance;
         }
 
@@ -229,88 +224,99 @@
             }
         }
 
+        // 期待される必要グラム数（materials_i × cans/baseCans + reserveMaterials_i）を算出するヘルパー
+        function expectedRequiredGrams(flavorId, cans) {
+            const flavor = flavorData[flavorId];
+            const requiredGrams = {};
+            let requiredTotalGrams = 0;
+            for (const [materialName, baseGrams] of Object.entries(flavor.materials)) {
+                const reserveGrams = flavor.reserveMaterials[materialName] || 0;
+                const grams = (baseGrams * cans) / flavor.baseCans + reserveGrams;
+                requiredGrams[materialName] = grams;
+                requiredTotalGrams += grams;
+            }
+            return { requiredGrams, requiredTotalGrams };
+        }
+
         // ========== テストの実行 ==========
 
-        // グループ: calculatePiecesPerGram
-        test('calculatePiecesPerGram', 'チーズの1枚あたりのグラム数を正確に計算', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
-            const expectedTotal = Object.values(flavorData.cheese.materials).reduce((sum, g) => sum + g, 0);
-            const expected = expectedTotal / flavorData.cheese.baseUnit.pieces;
-            assertClose(gramsPerPiece, expected);
+        // グループ: ゴールデンテスト（移行等価性・余り0）
+        test('ゴールデンテスト', 'チーズ・20缶・余り0gの各素材グラム数が期待値と一致', () => {
+            const result = calculateResults('cheese', 20, 0);
+            const expected = {
+                '米粉': 515.625,
+                '砂糖（白）': 191.625,
+                '太白ごま油': 203.125,
+                '卵': 130.25,
+                '片栗粉': 95.875,
+                '塩': 19.125,
+                'カシューチーズ': 250
+            };
+            for (const [materialName, expectedGrams] of Object.entries(expected)) {
+                assertClose(result.materialsGrams[materialName], expectedGrams,
+                    `${materialName}: expected ${expectedGrams}, got ${result.materialsGrams[materialName]}`);
+            }
+            assertClose(result.totalAdditionalGrams, 1405.625);
         });
 
-        test('calculatePiecesPerGram', '玉ねぎの1枚あたりのグラム数を正確に計算', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.onion);
-            const expectedTotal = Object.values(flavorData.onion.materials).reduce((sum, g) => sum + g, 0);
-            const expected = expectedTotal / flavorData.onion.baseUnit.pieces;
-            assertClose(gramsPerPiece, expected);
+        test('ゴールデンテスト', 'チーズ・40缶・余り0gの各素材グラム数が materials_i + reserveMaterials_i と一致', () => {
+            const result = calculateResults('cheese', 40, 0);
+            const flavor = flavorData.cheese;
+            for (const [materialName, baseGrams] of Object.entries(flavor.materials)) {
+                const expectedGrams = baseGrams + flavor.reserveMaterials[materialName];
+                assertClose(result.materialsGrams[materialName], expectedGrams,
+                    `${materialName}: expected ${expectedGrams}, got ${result.materialsGrams[materialName]}`);
+            }
+            assertClose(result.totalAdditionalGrams, 2530.125);
         });
 
-        test('calculatePiecesPerGram', 'チーズと玉ねぎの1枚あたりのグラム数が異なる', () => {
-            const cheesePPG = calculatePiecesPerGram(flavorData.cheese);
-            const onionPPG = calculatePiecesPerGram(flavorData.onion);
-            assert(cheesePPG !== onionPPG, 'グラム数が同じになってはいけません');
+        ['cheese', 'onion', 'maitake', 'sansho', 'miso'].forEach((flavorId) => {
+            [40, 20, 7].forEach((cans) => {
+                test('ゴールデンテスト', `${flavorId}・${cans}缶・余り0gの計算が期待式と一致`, () => {
+                    const result = calculateResults(flavorId, cans, 0);
+                    const { requiredGrams, requiredTotalGrams } = expectedRequiredGrams(flavorId, cans);
+                    for (const [materialName, expectedGrams] of Object.entries(requiredGrams)) {
+                        assertClose(result.materialsGrams[materialName], expectedGrams,
+                            `${flavorId}/${cans}缶/${materialName}: expected ${expectedGrams}, got ${result.materialsGrams[materialName]}`);
+                    }
+                    assertClose(result.totalAdditionalGrams, requiredTotalGrams);
+                });
+            });
         });
 
-        // グループ: calculateRemainingPieces
-        test('calculateRemainingPieces', '余り生地0gの場合、0枚を返す', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
-            const remaining = calculateRemainingPieces(0, gramsPerPiece);
-            assertStrictEqual(remaining, 0);
+        // グループ: 余り差し引き（比率按分）
+        test('余り差し引き', '追加合計gは必要合計gから余りgを引いた値になる', () => {
+            const { requiredTotalGrams } = expectedRequiredGrams('cheese', 20);
+            const remainingGrams = 100;
+            const result = calculateResults('cheese', 20, remainingGrams);
+            assertClose(result.totalAdditionalGrams, requiredTotalGrams - remainingGrams);
         });
 
-        test('calculateRemainingPieces', '余り生地が正の値の場合、適切な枚数を返す', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
-            const remaining = calculateRemainingPieces(200, gramsPerPiece);
-            assert(remaining > 0 && remaining <= 200 / gramsPerPiece, 'Invalid remaining pieces');
-        });
-
-        test('calculateRemainingPieces', '余り生地は小数が正しく丸め込まれる', () => {
-            const gramsPerPiece = 10;
-            const remaining = calculateRemainingPieces(25.9, gramsPerPiece);
-            assertStrictEqual(remaining, 2, 'Should floor the result');
-        });
-
-        // グループ: calculateAdditionalPieces
-        test('calculateAdditionalPieces', 'チーズ・20缶・余り0gの場合、正確に計算される', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
-            const remainingPieces = calculateRemainingPieces(0, gramsPerPiece);
-            const additional = calculateAdditionalPieces('cheese', 20, remainingPieces);
-            const expected = 20 * 10 + 50 - remainingPieces;
-            assertStrictEqual(additional, expected);
-        });
-
-        test('calculateAdditionalPieces', '玉ねぎ・10缶・余り100gの場合、正確に計算される', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.onion);
-            const remainingPieces = calculateRemainingPieces(100, gramsPerPiece);
-            const additional = calculateAdditionalPieces('onion', 10, remainingPieces);
-            const expected = 10 * 8 + 40 - remainingPieces;
-            assertStrictEqual(additional, expected);
-        });
-
-        test('calculateAdditionalPieces', '余り生地がある場合、追加枚数が減少する', () => {
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
-            const remaining0 = calculateRemainingPieces(0, gramsPerPiece);
-            const remaining200 = calculateRemainingPieces(200, gramsPerPiece);
-            const additional0 = calculateAdditionalPieces('cheese', 20, remaining0);
-            const additional200 = calculateAdditionalPieces('cheese', 20, remaining200);
-            assert(additional0 > additional200, '余り生地が多いほど追加枚数は減少すべき');
+        test('余り差し引き', '各素材が比率按分され、合計が totalAdditionalGrams に一致', () => {
+            const result = calculateResults('onion', 15, 200);
+            const { requiredGrams, requiredTotalGrams } = expectedRequiredGrams('onion', 15);
+            for (const [materialName, grams] of Object.entries(requiredGrams)) {
+                const expectedGrams = result.totalAdditionalGrams * (grams / requiredTotalGrams);
+                assertClose(result.materialsGrams[materialName], expectedGrams);
+            }
+            const sum = Object.values(result.materialsGrams).reduce((s, g) => s + g, 0);
+            assertClose(sum, result.totalAdditionalGrams);
         });
 
         // グループ: calculateMaterials
         test('calculateMaterials', 'チーズの素材が7種類返される', () => {
-            const { materialsGrams } = calculateMaterials('cheese', 100);
+            const { materialsGrams } = calculateMaterials('cheese', 20, 0);
             assertStrictEqual(Object.keys(materialsGrams).length, 7);
         });
 
         test('calculateMaterials', '玉ねぎの素材が8種類返される', () => {
-            const { materialsGrams } = calculateMaterials('onion', 100);
+            const { materialsGrams } = calculateMaterials('onion', 20, 0);
             assertStrictEqual(Object.keys(materialsGrams).length, 8);
         });
 
         test('calculateMaterials', 'チーズと玉ねぎで異なる素材が含まれる', () => {
-            const { materialsGrams: cheeseMaterials } = calculateMaterials('cheese', 100);
-            const { materialsGrams: onionMaterials } = calculateMaterials('onion', 100);
+            const { materialsGrams: cheeseMaterials } = calculateMaterials('cheese', 20, 0);
+            const { materialsGrams: onionMaterials } = calculateMaterials('onion', 20, 0);
             assert(cheeseMaterials['カシューチーズ'] > 0);
             assert(!onionMaterials['カシューチーズ']);
             assert(onionMaterials['玉ねぎパウダー'] > 0);
@@ -318,7 +324,7 @@
         });
 
         test('calculateMaterials', '素材の合計グラム数が totalAdditionalGrams と一致', () => {
-            const { materialsGrams, totalAdditionalGrams } = calculateMaterials('cheese', 100);
+            const { materialsGrams, totalAdditionalGrams } = calculateMaterials('cheese', 20, 0);
             const sum = Object.values(materialsGrams).reduce((s, g) => s + g, 0);
             assertClose(sum, totalAdditionalGrams);
         });
@@ -359,9 +365,8 @@
 
         test('calculateResults', '統合計算の結果オブジェクトが必要なキーを持つ', () => {
             const result = calculateResults('cheese', 20, 0);
-            const requiredKeys = ['flavorId', 'flavorName', 'cans', 'piecesPerCan', 'reservePieces',
-                                 'remainingGrams', 'remainingPieces', 'additionalPieces',
-                                 'totalAdditionalGrams', 'materialsGrams'];
+            const requiredKeys = ['flavorId', 'flavorName', 'cans', 'remainingGrams',
+                                 'requiredTotalGrams', 'totalAdditionalGrams', 'materialsGrams'];
             requiredKeys.forEach(key => {
                 assert(key in result, `Missing key: ${key}`);
             });
@@ -375,41 +380,30 @@
         });
 
         // グループ: 警告メッセージケース
-        test('警告メッセージ', '缶数が少なく余り生地が多い場合、追加枚数がマイナスになる', () => {
-            // チーズ: 1缶 * 10枚 + 50予備 = 60枚
-            // 1枚あたり: 約12.7g
-            // 余り1000gで: 1000 / 12.7 ≈ 78枚 > 60枚
-            // → 追加枚数がマイナスになる
-            const gramsPerPiece = calculatePiecesPerGram(flavorData.cheese);
+        test('警告メッセージ', '缶数が少なく余り生地が多い場合、追加合計gがマイナスになる', () => {
             const result = calculateResults('cheese', 1, 1000);
-            assert(result.additionalPieces <= 0,
-                   `additionalPieces should be <= 0, got ${result.additionalPieces}`);
+            assert(result.totalAdditionalGrams <= 0,
+                   `totalAdditionalGrams should be <= 0, got ${result.totalAdditionalGrams}`);
         });
 
-        test('警告メッセージ', '余り生地だけで足りる場合、追加枚数が0になる', () => {
-            // チーズ: 基本ユニット = 2缶20枚 ≈ 254.8g
-            // 1枚あたり: 254.8 / 20 ≈ 12.74g
-            // 1缶 * 10 + 50予備 = 60枚
-            // 60枚必要なグラム数: 60 * 12.74 ≈ 764.4g
-            // 余り生地がそれ以上あれば、追加枚数 <= 0
-            const result = calculateResults('cheese', 1, 800);
-            assert(result.additionalPieces <= 0,
-                   '余り生地が十分にあれば、追加枚数は0以下になる');
+        test('警告メッセージ', '余り生地だけで足りる場合、追加合計gが0以下になる', () => {
+            const { requiredTotalGrams } = expectedRequiredGrams('cheese', 1);
+            const result = calculateResults('cheese', 1, requiredTotalGrams + 10);
+            assert(result.totalAdditionalGrams <= 0,
+                   '余り生地が十分にあれば、追加合計gは0以下になる');
         });
 
-        test('警告メッセージ', '玉ねぎでも余り生地が多い場合、追加枚数がマイナスになる', () => {
-            // 玉ねぎ: 1缶 * 8枚 + 40予備 = 48枚
-            // 基本: 2缶16枚
+        test('警告メッセージ', '玉ねぎでも余り生地が多い場合、追加合計gがマイナスになる', () => {
             const result = calculateResults('onion', 1, 1000);
-            assert(result.additionalPieces <= 0,
-                   'Onion should also have negative additional pieces with large remaining dough');
+            assert(result.totalAdditionalGrams <= 0,
+                   'Onion should also have negative totalAdditionalGrams with large remaining dough');
         });
 
-        test('警告メッセージ', '缶数が多い場合は追加枚数が正になる', () => {
+        test('警告メッセージ', '缶数が多い場合は追加合計gが正になる', () => {
             // 缶数を多くすれば、余り生地の影響を上回る
             const result = calculateResults('cheese', 50, 100);
-            assert(result.additionalPieces > 0,
-                   '缶数が多いと追加枚数は常に正になる');
+            assert(result.totalAdditionalGrams > 0,
+                   '缶数が多いと追加合計gは常に正になる');
         });
 
         // グループ: DOM 初期化（Safari 対応）
@@ -539,14 +533,14 @@
             assertStrictEqual(totalRow.querySelector('.materials-unit').textContent, 'g');
         });
 
-        test('表示結果 DOM', 'displayResults() が必要枚数の数字だけをハイライトする', () => {
-            const result = calculateResults('sansho', 20, 0);
+        test('表示結果 DOM', '追加合計gが0以下のとき、材料リストが非表示になり警告が表示される', () => {
+            const result = calculateResults('cheese', 1, 1000);
             displayResults(result);
 
-            const totalPieces = document.getElementById('resultTotalPieces');
-            const accents = totalPieces.querySelectorAll('.result-accent');
-            assertStrictEqual(accents.length, 3);
-            assertStrictEqual(totalPieces.textContent, '160 + 予備40 = 200');
+            const materialsSection = document.getElementById('materialsSection');
+            const warningMessage = document.getElementById('warningMessage');
+            assertStrictEqual(materialsSection.style.display, 'none');
+            assertStrictEqual(warningMessage.style.display, 'block');
         });
 
         // グループ: プリセットボタン動作

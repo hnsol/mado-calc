@@ -314,56 +314,8 @@ button.clear-button:hover {
     border-left: 4px solid var(--accent-color);
 }
 
-.result-group.compact {
-    margin-bottom: 12px;
-    padding: 12px 16px;
-}
-
 .result-group:last-child {
     margin-bottom: 0;
-}
-
-.result-group p {
-    margin-bottom: 8px;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.result-group.compact p {
-    margin-bottom: 6px;
-    font-size: 15px;
-}
-
-.result-group.compact p:last-child {
-    margin-bottom: 0;
-}
-
-.result-group p:last-child {
-    margin-bottom: 0;
-}
-
-.result-accent {
-    color: var(--accent-color);
-    font-weight: 700;
-}
-
-#resultFlavor,
-#resultCans,
-#resultRemainingGrams,
-#resultRemainingPieces,
-#resultAdditionalPieces {
-    font-weight: 700;
-    color: var(--accent-color);
-}
-
-#materialsLabel {
-    color: var(--catppuccin-text);
-    font-weight: inherit;
-}
-
-#materialsLabel > span {
-    color: var(--accent-color);
-    font-weight: 700;
 }
 
 .materials-table {

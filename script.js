@@ -1,87 +1,131 @@
 // フレーバーごとのデータ定義
+// 枚数（ユニット枚数・缶あたり枚数・予備枚数）という概念は現実の運用にはもう存在せず、
+// グラム値が正である。基準は40缶（baseCans）だが、実際に仕込む缶数（cans）は可変。
+// 予備（reserveMaterials）はフレーバーごとの固定グラムで、缶数によらず一定量を加える。
+// materials は基準缶数ぶんのグラム（予備を含まない）。
+// 値を変更するときは docs/decisions/ の決定記録を参照すること。
 const flavorData = {
     cheese: {
         name: '🧀 チーズ',
         color: 'yellow',
-        piecesPerCan: 10,
-        reservePieces: 50,
-        baseUnit: { cans: 2, pieces: 20 },
+        baseCans: 40,
         materials: {
-            '米粉': 41.25,
-            '砂糖（白）': 15.33,
-            '太白ごま油': 16.25,
-            '卵': 10.42,
-            '片栗粉': 7.67,
-            '塩': 1.53,
-            'カシューチーズ': 20.0
+            '米粉': 825,
+            '砂糖（白）': 306.6,
+            '太白ごま油': 325,
+            '卵': 208.4,
+            '片栗粉': 153.4,
+            '塩': 30.6,
+            'カシューチーズ': 400
+        },
+        reserveMaterials: {
+            '米粉': 103.125,
+            '砂糖（白）': 38.325,
+            '太白ごま油': 40.625,
+            '卵': 26.05,
+            '片栗粉': 19.175,
+            '塩': 3.825,
+            'カシューチーズ': 50
         }
     },
     onion: {
         name: '🧅 玉ねぎ',
         color: 'orange',
-        piecesPerCan: 8,
-        reservePieces: 40,
-        baseUnit: { cans: 2, pieces: 16 },
+        baseCans: 40,
         materials: {
-            '米粉': 45.0,
-            '砂糖（白）': 20.0,
-            '太白ごま油': 23.0,
-            '卵': 12.0,
-            '片栗粉': 10.0,
-            '塩': 1.20,
-            '玉ねぎパウダー': 3.0,
-            '酒粕': 5.0
+            '米粉': 900,
+            '砂糖（白）': 400,
+            '太白ごま油': 460,
+            '卵': 240,
+            '片栗粉': 200,
+            '塩': 24,
+            '玉ねぎパウダー': 60,
+            '酒粕': 100
+        },
+        reserveMaterials: {
+            '米粉': 112.5,
+            '砂糖（白）': 50,
+            '太白ごま油': 57.5,
+            '卵': 30,
+            '片栗粉': 25,
+            '塩': 3,
+            '玉ねぎパウダー': 7.5,
+            '酒粕': 12.5
         }
     },
     maitake: {
         name: '🍄‍🟫 舞茸',
         color: 'gray',
-        piecesPerCan: 8,
-        reservePieces: 40,
-        baseUnit: { cans: 2, pieces: 16 },
+        baseCans: 40,
         materials: {
-            '米粉': 47.25,
-            '砂糖（白）': 21.0,
-            '太白ごま油': 24.6,
-            '卵': 12.6,
-            '片栗粉': 10.5,
-            '塩': 1.239,
-            '舞茸パウダー': 3.15,
-            '竹炭': 0.2268
+            '米粉': 945,
+            '砂糖（白）': 420,
+            '太白ごま油': 492,
+            '卵': 252,
+            '片栗粉': 210,
+            '塩': 24.78,
+            '舞茸パウダー': 63,
+            '竹炭': 4.536
+        },
+        reserveMaterials: {
+            '米粉': 118.125,
+            '砂糖（白）': 52.5,
+            '太白ごま油': 61.5,
+            '卵': 31.5,
+            '片栗粉': 26.25,
+            '塩': 3.0975,
+            '舞茸パウダー': 7.875,
+            '竹炭': 0.567
         }
     },
     sansho: {
         name: '🌿 山椒',
         color: 'dark green',
-        piecesPerCan: 8,
-        reservePieces: 40,
-        baseUnit: { cans: 2, pieces: 16 },
+        baseCans: 40,
         materials: {
-            '米粉': 58.5,
-            '砂糖（白）': 13.0,
-            '太白ごま油': 26.65,
-            '卵': 19.5,
-            '片栗粉': 7.8,
-            '塩': 1.56,
-            'よもぎ': 6.5,
-            '山椒': 3.25
+            '米粉': 1170,
+            '砂糖（白）': 260,
+            '太白ごま油': 533,
+            '卵': 390,
+            '片栗粉': 156,
+            '塩': 31.2,
+            'よもぎ': 130,
+            '山椒': 65
+        },
+        reserveMaterials: {
+            '米粉': 146.25,
+            '砂糖（白）': 32.5,
+            '太白ごま油': 66.625,
+            '卵': 48.75,
+            '片栗粉': 19.5,
+            '塩': 3.9,
+            'よもぎ': 16.25,
+            '山椒': 8.125
         }
     },
     miso: {
         name: '🫘 味噌',
         color: 'brown',
-        piecesPerCan: 6,
-        reservePieces: 30,
-        baseUnit: { cans: 2, pieces: 12 },
+        baseCans: 40,
         materials: {
-            '米粉': 40.0,
-            '砂糖（白）': 7.5,
-            '太白ごま油': 20.0,
-            '卵': 15.0,
-            '片栗粉': 5.0,
-            '味噌': 6.0,
-            '柚子胡椒': 0.6,
-            'アーモンドパウダー': 10.0
+            '米粉': 800,
+            '砂糖（白）': 150,
+            '太白ごま油': 400,
+            '卵': 300,
+            '片栗粉': 100,
+            '味噌': 120,
+            '柚子胡椒': 12,
+            'アーモンドパウダー': 200
+        },
+        reserveMaterials: {
+            '米粉': 100,
+            '砂糖（白）': 18.75,
+            '太白ごま油': 50,
+            '卵': 37.5,
+            '片栗粉': 12.5,
+            '味噌': 15,
+            '柚子胡椒': 1.5,
+            'アーモンドパウダー': 25
         }
     }
 };
@@ -100,57 +144,43 @@ function validateInputs(flavorId, cans, remainingGrams) {
     return { valid: true };
 }
 
-// 1枚あたりのグラム数を計算する純粋関数
-function calculatePiecesPerGram(flavor) {
-    const totalMaterialsPerBaseUnit = Object.values(flavor.materials).reduce((sum, g) => sum + g, 0);
-    return totalMaterialsPerBaseUnit / flavor.baseUnit.pieces;
-}
-
-// 余り生地で作れる枚数を計算する純粋関数
-function calculateRemainingPieces(remainingGrams, gramsPerPiece) {
-    return Math.floor(remainingGrams / gramsPerPiece);
-}
-
-// 追加すべき枚数を計算する純粋関数
-function calculateAdditionalPieces(flavorId, cans, remainingPieces) {
+// 各素材の必要グラム数（缶数ぶん + 予備）と、余りgを差し引いた追加グラム数を計算する純粋関数
+// 必要g_i(cans) = materials_i × cans / baseCans + reserveMaterials_i
+// 追加合計g      = 必要合計g − 余りg
+// 追加g_i        = 追加合計g × (必要g_i / 必要合計g)
+function calculateMaterials(flavorId, cans, remainingGrams) {
     const flavor = flavorData[flavorId];
-    const totalPieces = cans * flavor.piecesPerCan + flavor.reservePieces;
-    return totalPieces - remainingPieces;
-}
+    const requiredGrams = {};
+    let requiredTotalGrams = 0;
 
-// 各素材のグラム数を計算する純粋関数
-function calculateMaterials(flavorId, additionalPieces) {
-    const flavor = flavorData[flavorId];
-    const materialsGrams = {};
-    let totalAdditionalGrams = 0;
-
-    for (const [materialName, gramsPerBaseUnit] of Object.entries(flavor.materials)) {
-        const gramsPerPieceForMaterial = gramsPerBaseUnit / flavor.baseUnit.pieces;
-        const gramsNeeded = gramsPerPieceForMaterial * additionalPieces;
-        materialsGrams[materialName] = gramsNeeded;
-        totalAdditionalGrams += gramsNeeded;
+    for (const [materialName, gramsPerBaseCans] of Object.entries(flavor.materials)) {
+        const reserveGrams = flavor.reserveMaterials[materialName] || 0;
+        const grams = (gramsPerBaseCans * cans) / flavor.baseCans + reserveGrams;
+        requiredGrams[materialName] = grams;
+        requiredTotalGrams += grams;
     }
 
-    return { materialsGrams, totalAdditionalGrams };
+    const totalAdditionalGrams = requiredTotalGrams - remainingGrams;
+
+    const materialsGrams = {};
+    for (const [materialName, grams] of Object.entries(requiredGrams)) {
+        materialsGrams[materialName] = totalAdditionalGrams * (grams / requiredTotalGrams);
+    }
+
+    return { materialsGrams, requiredTotalGrams, totalAdditionalGrams };
 }
 
 // 全計算を統合する純粋関数
 function calculateResults(flavorId, cans, remainingGrams) {
     const flavor = flavorData[flavorId];
-    const gramsPerPiece = calculatePiecesPerGram(flavor);
-    const remainingPieces = calculateRemainingPieces(remainingGrams, gramsPerPiece);
-    const additionalPieces = calculateAdditionalPieces(flavorId, cans, remainingPieces);
-    const { materialsGrams, totalAdditionalGrams } = calculateMaterials(flavorId, additionalPieces);
+    const { materialsGrams, requiredTotalGrams, totalAdditionalGrams } = calculateMaterials(flavorId, cans, remainingGrams);
 
     return {
         flavorId,
         flavorName: flavor.name,
         cans,
-        piecesPerCan: flavor.piecesPerCan,
-        reservePieces: flavor.reservePieces,
         remainingGrams,
-        remainingPieces,
-        additionalPieces,
+        requiredTotalGrams,
         totalAdditionalGrams,
         materialsGrams
     };
@@ -177,39 +207,18 @@ function calculate() {
 }
 
 function displayResults(results) {
-    const { flavorId, flavorName, cans, piecesPerCan, reservePieces,
-            remainingGrams, remainingPieces, additionalPieces,
-            totalAdditionalGrams, materialsGrams } = results;
+    const { totalAdditionalGrams, materialsGrams } = results;
 
-    // 缶数分の枚数と予備枚数を計算
-    const cansPieces = cans * piecesPerCan;
-    const totalPieces = cansPieces + reservePieces;
-
-    // 警告メッセージを表示するかどうかをチェック
+    // 警告メッセージを表示するかどうかをチェック（追加合計gが0以下なら材料リストは表示しない）
     const warningMessage = document.getElementById('warningMessage');
+    const materialsSection = document.getElementById('materialsSection');
+    const showWarning = totalAdditionalGrams <= 0;
     if (warningMessage) {
-        if (additionalPieces <= 0) {
-            warningMessage.style.display = 'block';
-        } else {
-            warningMessage.style.display = 'none';
-        }
+        warningMessage.style.display = showWarning ? 'block' : 'none';
     }
-
-    // 入力情報の表示
-    document.getElementById('resultFlavor').textContent = flavorName;
-    document.getElementById('resultCans').textContent = cans;
-    document.getElementById('resultTotalPieces').innerHTML =
-        `<span class="result-accent">${cansPieces}</span> + 予備` +
-        `<span class="result-accent">${reservePieces}</span> = ` +
-        `<span class="result-accent">${totalPieces}</span>`;
-
-    // 余り生地の表示
-    document.getElementById('resultRemainingGrams').textContent = remainingGrams.toFixed(1);
-    document.getElementById('resultRemainingPieces').textContent = remainingPieces;
-
-    // 追加生地の表示
-    document.getElementById('resultAdditionalPieces').textContent = additionalPieces;
-    document.getElementById('materialsLabel').innerHTML = `（追加生地<span>${additionalPieces}</span>枚ぶん）`;
+    if (materialsSection) {
+        materialsSection.style.display = showWarning ? 'none' : 'block';
+    }
 
     // 素材ごとのグラム数を表示
     const materialsDetailDiv = document.getElementById('materialsDetail');
@@ -400,5 +409,5 @@ if (typeof document !== 'undefined') {
 
 // Node.js（テスト実行）環境向けエクスポート
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { flavorData, validateInputs, calculatePiecesPerGram, calculateRemainingPieces, calculateAdditionalPieces, calculateMaterials, calculateResults };
+    module.exports = { flavorData, validateInputs, calculateMaterials, calculateResults };
 }
