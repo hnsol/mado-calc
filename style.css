@@ -320,42 +320,53 @@ button.clear-button:hover {
 }
 
 @keyframes toast-pop {
-    /* 出始めはまっすぐ → 最高到達点で最大に傾く → 減衰振動で着地
-       （振幅は等比 ×0.375、半周期は等間隔 18% の減衰振動近似） */
+    /* トースターの3段階: 急激に射出 → 空中で一瞬フワッ → 落下して着地
+       （バネ的な減衰振動ではなく「出来事」として描く） */
     0% {
         transform: translateY(100%) translateX(0) rotate(0deg);
         opacity: 0;
-        /* 飛び出しは減速しながら頂点へ */
-        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        animation-timing-function: cubic-bezier(0.15, 0.8, 0.25, 1);
     }
-    45% {
-        transform: translateY(-1.5%)
-            translateX(calc(var(--toast-dir, 0.6) * 7.5px))
-            rotate(calc(var(--toast-dir, 0.6) * 1.2deg));
+    /* 勢いよく射出（縦に伸びる誇張入り）。飛び出し量は px でキャップして
+       背の高いカードでも画面外に出ないようにする */
+    18% {
+        transform: translateY(max(-12%, -30px))
+            translateX(calc(4px * var(--toast-dir, 0.6)))
+            rotate(calc(2deg * var(--toast-dir, 0.6)))
+            scaleX(0.98) scaleY(1.03);
         opacity: 1;
-        /* 以降の各半振動は正弦運動相当 */
-        animation-timing-function: ease-in-out;
+        animation-timing-function: cubic-bezier(0.25, 0.1, 0.35, 1);
     }
-    63% {
-        transform: translateY(0.55%)
-            translateX(calc(var(--toast-dir, 0.6) * -2.8px))
-            rotate(calc(var(--toast-dir, 0.6) * -0.45deg));
-        animation-timing-function: ease-in-out;
+    /* 空中の頂点 */
+    30% {
+        transform: translateY(max(-16%, -40px))
+            translateX(calc(7px * var(--toast-dir, 0.6)))
+            rotate(calc(2.8deg * var(--toast-dir, 0.6)))
+            scale(1);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5);
     }
-    81% {
-        transform: translateY(-0.2%)
-            translateX(calc(var(--toast-dir, 0.6) * 1.05px))
-            rotate(calc(var(--toast-dir, 0.6) * 0.17deg));
-        animation-timing-function: ease-in-out;
+    /* 落下・着地 */
+    48% {
+        transform: translateY(3%)
+            translateX(calc(-2px * var(--toast-dir, 0.6)))
+            rotate(calc(-0.8deg * var(--toast-dir, 0.6)));
+        animation-timing-function: ease-out;
     }
-    99% {
-        transform: translateY(0)
-            translateX(calc(var(--toast-dir, 0.6) * -0.4px))
-            rotate(calc(var(--toast-dir, 0.6) * -0.06deg));
-        animation-timing-function: ease-in-out;
+    /* 小さく跳ねる */
+    62% {
+        transform: translateY(-2%)
+            translateX(calc(1px * var(--toast-dir, 0.6)))
+            rotate(calc(0.4deg * var(--toast-dir, 0.6)));
+    }
+    /* 再着地 */
+    76% {
+        transform: translateY(0.7%)
+            translateX(calc(-0.4px * var(--toast-dir, 0.6)))
+            rotate(calc(-0.15deg * var(--toast-dir, 0.6)));
     }
     100% {
         transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
     }
 }
 
