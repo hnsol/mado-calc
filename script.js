@@ -279,8 +279,11 @@ function displayResults(results) {
     totalDiv.innerHTML = '';
     totalDiv.appendChild(totalRow);
 
-    // 結果セクションを表示
-    document.getElementById('results').style.display = 'block';
+    // 結果セクションを表示（飛び出しの傾き方向をランダムに決める）
+    const resultsSection = document.getElementById('results');
+    const tiltDir = (0.4 + Math.random() * 0.6) * (Math.random() < 0.5 ? -1 : 1);
+    resultsSection.style.setProperty('--toast-dir', tiltDir.toFixed(2));
+    resultsSection.style.display = 'flex';
 }
 
 function setCans(value) {
@@ -296,7 +299,7 @@ function setRemainingDough(value) {
 }
 
 function clearInputs() {
-    document.getElementById('cans').value = '20';
+    document.getElementById('cans').value = '40';
     document.getElementById('remainingDough').value = '0.0';
     syncPresetButtons('cans');
     syncPresetButtons('remainingDough');
@@ -353,11 +356,32 @@ function onFlavorChange() {
     const flavorId = document.getElementById('flavor').value;
     const flavor = flavorData[flavorId];
     const accentColor = flavor ? colorMap[flavor.color] || '#df8e1d' : '#df8e1d';
-    document.documentElement.style.setProperty('--accent-color', accentColor);
     const rowAccentColor = flavor ? (rowAccentMap[flavor.color] || accentColor) : accentColor;
-    document.documentElement.style.setProperty('--row-accent-color', rowAccentColor);
-    // 計算結果を消去
-    document.getElementById('results').style.display = 'none';
+    const applyColors = () => {
+        document.documentElement.style.setProperty('--accent-color', accentColor);
+        document.documentElement.style.setProperty('--row-accent-color', rowAccentColor);
+    };
+
+    // 計算結果を消去（カードが仕舞われてから色を変える）
+    const results = document.getElementById('results');
+    const wasVisible = results.style.display !== 'none';
+    results.style.display = 'none';
+    const animated = typeof matchMedia === 'function' &&
+        !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (wasVisible && animated) {
+        // スライドアウト完了イベントで色替え（発火しない場合に備えタイマーで保険）
+        let colorsApplied = false;
+        const applyOnce = () => {
+            if (!colorsApplied) {
+                colorsApplied = true;
+                applyColors();
+            }
+        };
+        results.addEventListener('transitionend', applyOnce, { once: true });
+        setTimeout(applyOnce, 400);
+    } else {
+        applyColors();
+    }
 }
 
 // DOMContentLoaded で確実に初期化（Safari モバイル対応）
