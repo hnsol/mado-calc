@@ -29,7 +29,9 @@ body {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 12px rgba(76, 79, 105, 0.1);
-    min-height: calc(100dvh - 40px);
+    /* 高さを画面に固定し、カードが大きくてもページ全体は伸ばさない
+       （溢れは .results-section 内のスクロールに閉じ込める） */
+    height: calc(100dvh - 40px);
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
     gap: 16px;
@@ -82,6 +84,8 @@ h3 {
     border: 1px solid var(--catppuccin-surface1);
     box-shadow: 0 10px 24px rgba(76, 79, 105, 0.08);
     align-self: end;
+    /* 結果カード（1行目）が display:none でも繰り上がらないよう2行目に固定 */
+    grid-row: 2;
     /* スライド中の結果カードを背面に通す */
     position: relative;
     z-index: 1;
@@ -511,7 +515,7 @@ button.clear-button:hover {
     .container {
         padding: 14px;
         border-radius: 18px;
-        min-height: calc(100dvh - 28px);
+        height: calc(100dvh - 28px);
         gap: 12px;
     }
 
