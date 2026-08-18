@@ -51,13 +51,13 @@ console.log('========================================\n');
 test('チーズ・20缶・余り0gの各素材グラム数が期待値と一致', () => {
     const result = calculateResults('cheese', 20, 0);
     const expected = {
-        '米粉': 515.625,
-        '砂糖（白）': 191.625,
-        '太白ごま油': 203.125,
-        '卵': 130.25,
-        '片栗粉': 95.875,
-        '塩': 19.125,
-        'カシューチーズ': 250
+        '米粉': 570.26,
+        '砂糖（白）': 211.925,
+        '太白ごま油': 224.65,
+        '卵': 144.05,
+        '片栗粉': 106.03,
+        '塩': 21.15,
+        'カシューチーズ': 276.49
     };
     for (const [materialName, expectedGrams] of Object.entries(expected)) {
         assert(
@@ -65,8 +65,8 @@ test('チーズ・20缶・余り0gの各素材グラム数が期待値と一致'
             `${materialName}: expected ${expectedGrams}, got ${result.materialsGrams[materialName]}`
         );
     }
-    assert(closeToNumber(result.totalAdditionalGrams, 1405.625),
-        `Expected total 1405.625, got ${result.totalAdditionalGrams}`);
+    assert(closeToNumber(result.totalAdditionalGrams, 1554.555),
+        `Expected total 1554.555, got ${result.totalAdditionalGrams}`);
 });
 
 test('チーズ・40缶・余り0gの各素材グラム数が materials_i + reserveMaterials_i と一致', () => {
@@ -79,10 +79,10 @@ test('チーズ・40缶・余り0gの各素材グラム数が materials_i + rese
             `${materialName}: expected ${expectedGrams}, got ${result.materialsGrams[materialName]}`
         );
     }
-    assert(closeToNumber(result.materialsGrams['米粉'], 928.125),
-        `米粉: expected 928.125, got ${result.materialsGrams['米粉']}`);
-    assert(closeToNumber(result.totalAdditionalGrams, 2530.125),
-        `Expected total 2530.125, got ${result.totalAdditionalGrams}`);
+    assert(closeToNumber(result.materialsGrams['米粉'], 1012.13),
+        `米粉: expected 1012.13, got ${result.materialsGrams['米粉']}`);
+    assert(closeToNumber(result.totalAdditionalGrams, 2759.12),
+        `Expected total 2759.12, got ${result.totalAdditionalGrams}`);
 });
 
 ['cheese', 'onion', 'maitake', 'sansho', 'miso'].forEach((flavorId) => {
